@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="stylesheet" href="../src/Script.css">
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Diet Calculation App</title>
+    <header>
+        <h1 align="center"> Diet Calculator</h1>
+    </header>
+  </head>
+  <body>
+    <script type="text/javascript" src="../src/bmr.js">You need to enable JavaScript to run this app.</script>
+    <div id ="container" align="center">
+        <form>
+            <div class="wrapper-calories">
+                <div id="column-one">
+                    <p style="font-weight: bold;font-size:20px"> Enter total daily calorie intake
+                    <input id = "targetCalories" name="CalorieIntake" type="text" size="7" value="1500" 
+                    class="calorie-field-style">
+                    </p>
+                    <h3 id="calculator-h3">Enter desired macronutrient percentages %</h3>
+                    <p>
+                        Carbohydrate
+                        <input type="text" id ="carb-per" name="carb-per" value="30"  size="4">
+                    </p>
+                    <p>
+                        Protein
+                        <input type="text" id="protien-per" name="protien-per" value="35" size="4">
+                    </p>
+                    <p style="margin-bottom: 5px !important;">
+                        Fat
+                        <input type="text" id="fat-per" name="fat-per" value="35" size="4">                    
+                    </p>
+                        <div class="inner">
+                        <input type="button" value="Calculate" class="CalculateButton" onclick="calc(this.form)">
+                        <input type="reset" value="Reset" name="Reset" class="ResetButton">
+                        </div>
+                        <p style="font-weight: bold;font-size:14px "> Note: Please make sure that all the percentages add upto 100</p>
+                </div>
+                <div id="column-two" class = "grid-container" style="width:80%">
+                <div class="grid-child-clories" style="width:50%; float:left;">
+                <h3 id="calculator-h3">Calories from each macronutrient</h3>
+                <p style="margin-bottom: 3px;">
+                    Carbs
+                    <input name="CarbCalories" type="text" size="7" class="calorie-results-field" placeholder="Carb calories"> 
+                </p>
+                <p style="margin-bottom: 3px;">
+                    Protein
+                    <input name="ProteinCalories" type="text" size="7" class="calorie-results-field" placeholder="Protein calories"> 
+                </p>
+                <p style="margin-bottom: 3px;">
+                    Fat
+                    <input name="FatCalories" type="text" size="7" class="calorie-results-field" placeholder="Fat calories"> 
+                </p>
+                </div>
+                <div class="grid-child-grams" style="width:50%; float:right;">
+                <h3 id="calculator-h3">Grams of each macronutrient</h3>
+                <p style="margin-bottom: 3px;">
+                    Carbs (g)
+                    <input name="CarbGrams" type="text" size="7" class="grams-results-field" placeholder="Carb grams"> </p>
+                <p style="margin-bottom: 3px;">
+                    Protein (g)
+                    <input name="ProteinGrams" type="text" size="7" class="grams-results-field" placeholder="Protein grams"></p>
+                <p style="margin-bottom: 3px;">
+                    Fat (g)
+                    <input name="FatGrams" type="text" size="7" class="grams-results-field" placeholder="Fat grams"></p>
+                </div>
+                </div>
+            </div>
+    </form>
+    </div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+
+    <div id="outer">
+
+    </div>
+    -->
+  </body>
+</html>
