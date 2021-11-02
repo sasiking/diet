@@ -1,8 +1,77 @@
+*{
+  margin:  0px;
+  padding: 0.80px;
+  box-sizing: border-box;
+} 
+
+/*
+*{
+  margin:  0.5px;
+  padding: 0.5px;
+  box-sizing: border-box;
+} 
+*/
+
 header {
   background: #023d6d;
   color: white;
-  padding: 1rem;
+  padding: 0.5rem;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.26);
   width: 100%;
+}
+
+body{
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.7;
+  padding: 3px;
+}
+
+.input-calories{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.grid-container{
+  width: 80%;
+  position: relative;
+}
+
+.grid-child-calories{
+  /*width: 50%;*/
+  position: absolute;
+  top: 15%;
+  left:15%;
+  /*float: left;*/
+}
+
+.grid-child-grams{
+  
+/*  width: 50%;*/
+
+  position: absolute;
+  top: 55%;
+  left: 55%;
+
+/*  float: left;*/
+}
+
+/*#CalculateButton: hover,*/
+.CalculateButton{
+  font-weight: bold;
+  font-size: 15px;
+  background: #00a89d;
+  border-color: #000000;
+}
+.ResetButton{
+  font-weight: bold;
+  font-size: 15px;
+  background: #00a89d;
+  border-color: #000000;
+}
+
+.calorie-results-field{
+  align-items: center;
 }
