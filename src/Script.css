@@ -13,11 +13,11 @@
 */
 
 header {
-  background: #023d6d;
+  background: #00a89d;
   color: white;
   padding: 0.5rem;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.26);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.30);
   width: 100%;
 }
 
@@ -59,19 +59,33 @@ body{
 }
 
 /*#CalculateButton: hover,*/
-.CalculateButton{
+.Button{
   font-weight: bold;
   font-size: 15px;
   background: #00a89d;
-  border-color: #000000;
-}
-.ResetButton{
-  font-weight: bold;
-  font-size: 15px;
-  background: #00a89d;
-  border-color: #000000;
+  border: 1px #00a89d solid;
+  border-radius: 8px;
+  padding: 4px;
+  cursor: pointer;
 }
 
+.Button:hover, 
+.Button:active{
+  color:#00a89d;
+  background-color: white;
+}
+
+
+.addBtn{
+  margin-left: 4px;
+}
+.addCont{
+  margin-left: 600px;
+}
 .calorie-results-field{
   align-items: center;
+}
+
+#select-source{
+  margin-left: 575px;
 }
