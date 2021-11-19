@@ -118,12 +118,6 @@ function AddDropDownList() {
 	var res = toString(cat.Quantity) + toString(cat.cal)+ toString(cat.c) + toString(cat.p) + toString(cat.f)
 	resval.innerHTML = "Cat"//res;
 
-	console.log(selcat.value)
-	console.log(cat.Quantity)
-	console.log(cat.cal)
-	console.log(cat.c)
-	console.log(cat.p)
-	console.log(cat.f)
 
 	addBtn = document.createElement("INPUT");
 	addBtn.value = "Add Resource";
@@ -140,12 +134,6 @@ function AddDropDownList() {
 		cat[ind].c +" Protien ="+ cat[ind].p +" Fats ="+ cat[ind].f
 		resval.innerHTML = res;
 		div.appendChild(resval);
-		console.log(cat[ind].Quantity)
-		console.log(cat[ind].cal)
-		console.log(cat[ind].c)
-		console.log(cat[ind].p)
-		console.log(cat[ind].f)
-		console.log(ind)
 	}
 
 	//Create a Remove Button.
