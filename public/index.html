@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet"/>
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
@@ -30,8 +32,8 @@
     </header>
   </head>
   <body>
-    <script type="text/javascript" src="../src/bmr.js">
-    </script>
+    <script type="text/javascript" src="../src/bmr.js"></script>
+    <script type="text/javascript" src="../src/resources.js"></script>
     <div id ="container" align="center">
         <form>
             <div class="wrapper-calories">
@@ -54,8 +56,8 @@
                         <input type="text" id="fat-per" name="fat-per" value="35" size="4">                    
                     </p>
                         <div class="inner">
-                        <input type="button" value="Calculate" class="CalculateButton" onclick="calc(this.form)">
-                        <input type="reset" value="Reset" name="Reset" class="ResetButton">
+                        <input type="button" value="Calculate" class="Button" onclick="calc(this.form)">
+                        <input type="reset" value="Reset" name="Reset" class="Button">
                         </div>
                         <p> Note: Please make sure that all the percentages add upto 100</p>
                 </div>
@@ -92,8 +94,19 @@
     </form>
     </div>
     <br/><br/><br/><br/><br/><br/>
-    <input type="button" id = "btnAdd" onclick = "AddDropDownList()" value = "Add Diet Sources" />
-    <div id = "dvContainer"></div>
+    <div>
+      <select name="slec" id="select-source" >
+        <option value="Dairy" selected>Dairy</option>
+        <option value="Veg">Veg</option>
+        <option value="Non-Veg">Non-Veg</option>
+        <option value="Seeds">Seeds</option>
+        <option value="Nuts">Nuts</option>
+        <option value="Millets">Millets</option>
+      </select>
+
+    <input type="button" id = "btnAdd" class="Button addBtn"onclick = "AddDropDownList()" value = "Add Diet Sources" />
+    <div id = "dvContainer" class="addCont"></div>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
