@@ -1,3 +1,4 @@
+
 function calc (form) {
      var C, P, F 
      
@@ -42,18 +43,15 @@ function AddDropDownList() {
 	var category = [
 		{Name:"Dairy"},
 		{Name:"Veg"},
-		{Name:"Non Veg"},
+		{Name:"Non_Veg"},
 		{Name:"Nuts"},
 		{Name:"Seeds"},
 		{Name:"Millets"},
 	];
-	var customers = [
-		{ CustomerId: 1, Name: "John Hammond", Country: "United States" },
-		{ CustomerId: 2, Name: "Mudassar Khan", Country: "India" },
-		{ CustomerId: 3, Name: "Suzanne Mathews", Country: "France" },
-		{ CustomerId: 4, Name: "Robert Schidner", Country: "Russia" }
-	];
-	//Create a DropDownList element.
+	const sel = document.getElementById("select-source").value;
+
+	console.log(sel);
+
 	var ddlCustomers = document.createElement("SELECT");
 
 	//Add the Options to the DropDownList.
@@ -68,39 +66,102 @@ function AddDropDownList() {
 		ddlCustomers.options.add(option);
 	}
 
-	// for (var i = 0; i < customers.length; i++) {
-	// 	var option = document.createElement("OPTION");
-
-	// 	//Set Customer Name in Text part.
-	// 	option.innerHTML = customers[i].Name;
-	// 	option.innerHTML = customers[i].Country;
-
-	// 	//Set CustomerId in Value part.
-	// 	option.value = customers[i].CustomerId;
-
-
-	// 	//Add the Option element to DropDownList.
-	// 	ddlCustomers.options.add(option);
-	// }
-
 	//Reference the container DIV.
-	var dvContainer = document.getElementById("dvContainer")
+	var dvContainer = document.getElementById("dvContainer");
+	// var selval = document.createElement("P");
+	// selval.innerHTML = sel;
+	// dvContainer.appendChild(selval);
+	var cat;
+	//console.log(sel)
+	if(sel==="Dairy"){
+		//console.log(category_dairy);
+		cat = category_dairy
+	}
+	else if(sel==="Nuts")
+	{
+		//console.log(category_nuts)
+		cat = category_nuts
+	}
+	else if(sel==="Veg"){
+		//console.log(category_veg)
+		cat = category_veg
+	}
+	else if(sel==="Millets"){
+		//console.log(category_millets)
+		cat = category_millets
+	}
+	else if(sel=="Seeds"){
+		//console.log(category_seeds)
+		cat = category_seeds
+	}
+	else{
+		//console.log(category_non_veg)
+		cat = category_non_veg
+	}
+	console.log(cat);
+	var selcat = document.createElement("SELECT");
 
-	//Add the DropDownList to DIV.
+	//Add the Options to the DropDownList.
+	for (var i = 0; i < cat.length; i++) {
+		var option = document.createElement("OPTION");
+
+		//Set Customer Name in Text part.
+		option.innerHTML = cat[i].Name;
+
+		//Set CustomerId in Value part.
+		//Add the Option element to DropDownList.
+		selcat.options.add(option);
+	}
+	// {Name:"Sunflower", Quantity:10, cal:63,c:1,p:2,f:2.4},
+	
+	var resval = document.createElement("P");
+	var res = toString(cat.Quantity) + toString(cat.cal)+ toString(cat.c) + toString(cat.p) + toString(cat.f)
+	resval.innerHTML = "Cat"//res;
+
+	console.log(selcat.value)
+	console.log(cat.Quantity)
+	console.log(cat.cal)
+	console.log(cat.c)
+	console.log(cat.p)
+	console.log(cat.f)
+
+	addBtn = document.createElement("INPUT");
+	addBtn.value = "Add Resource";
+	addBtn.type = "button";
+	addBtn.className = "Button";
+
 	var div = document.createElement("DIV");
-	div.appendChild(ddlCustomers);
+	div.appendChild(selcat);
+
+	addBtn.onclick = function(){
+		var ind = cat.findIndex(x=>x.Name===selcat.value)
+		var resval = document.createElement("P");
+		var res = "Quantity = "+cat[ind].Quantity +" Calories ="+ cat[ind].cal +" Carbs ="+ 
+		cat[ind].c +" Protien ="+ cat[ind].p +" Fats ="+ cat[ind].f
+		resval.innerHTML = res;
+		div.appendChild(resval);
+		console.log(cat[ind].Quantity)
+		console.log(cat[ind].cal)
+		console.log(cat[ind].c)
+		console.log(cat[ind].p)
+		console.log(cat[ind].f)
+		console.log(ind)
+	}
 
 	//Create a Remove Button.
 	var btnRemove = document.createElement("INPUT");
 	btnRemove.value = "Remove";
 	btnRemove.type = "button";
+	btnRemove.className = "Button"
 	btnRemove.onclick = function () {
 		dvContainer.removeChild(this.parentNode);
 	};
 
-	//Add the Remove Buttton to DIV.
-	div.appendChild(btnRemove);
 
+	//Add the Remove Buttton to DIV.
+	div.appendChild(addBtn);
+	div.appendChild(btnRemove);
+	
 	//Add the DIV to the container DIV.
 	dvContainer.appendChild(div);
 }
