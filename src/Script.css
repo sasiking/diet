@@ -75,7 +75,14 @@ body{
   background-color: white;
 }
 
+.total{
+  text-align: center;
+}
+.div-resource{
+  margin-left: 20px;
+  padding: 8px;
 
+}
 .addBtn{
   margin-left: 4px;
 }
@@ -84,6 +91,9 @@ body{
 }
 .calorie-results-field{
   align-items: center;
+}
+.resources{
+  margin-top: 128px;
 }
 
 #select-source{
