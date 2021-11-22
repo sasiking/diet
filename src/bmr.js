@@ -1,4 +1,8 @@
-
+var cnt = 0;
+var glocals = 0
+var glocarbs =0
+var gloprot =0 
+var glofats =0
 function calc (form) {
      var C, P, F 
      
@@ -114,9 +118,6 @@ function AddDropDownList() {
 	}
 	// {Name:"Sunflower", Quantity:10, cal:63,c:1,p:2,f:2.4},
 	
-	var resval = document.createElement("P");
-	var res = toString(cat.Quantity) + toString(cat.cal)+ toString(cat.c) + toString(cat.p) + toString(cat.f)
-	resval.innerHTML = "Cat"//res;
 
 
 	addBtn = document.createElement("INPUT");
@@ -125,15 +126,30 @@ function AddDropDownList() {
 	addBtn.className = "Button";
 
 	var div = document.createElement("DIV");
+	div.className = "div-resource"
 	div.appendChild(selcat);
 
 	addBtn.onclick = function(){
 		var ind = cat.findIndex(x=>x.Name===selcat.value)
 		var resval = document.createElement("P");
-		var res = "Quantity = "+cat[ind].Quantity +" Calories ="+ cat[ind].cal +" Carbs ="+ 
-		cat[ind].c +" Protien ="+ cat[ind].p +" Fats ="+ cat[ind].f
+		var qun = cat[ind].Quantity 
+		var cals = cat[ind].cal
+		var carbs = cat[ind].c 
+		var prot = cat[ind].p
+		var fats = cat[ind].f
+		var res ="Name = "+cat[ind].Name+ "  Quantity = "+qun+" Calories ="+ cals +" Carbs ="+ 
+		carbs +" Protien ="+ prot  +" Fats ="+ fats
 		resval.innerHTML = res;
+		cnt++;
 		div.appendChild(resval);
+		glocals += cals
+		glocarbs += carbs
+		gloprot += prot
+		glofats += fats
+		var total ="Total Calories ="+ glocals +" Carbs ="+ 
+		glocarbs +" Protien ="+ gloprot  +" Fats ="+ glofats
+		var totalcls = document.getElementById("total-resources")
+		totalcls.innerHTML = total
 	}
 
 	//Create a Remove Button.
