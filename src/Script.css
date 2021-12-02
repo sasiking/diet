@@ -12,6 +12,44 @@
 } 
 */
 
+@media screen and (max-width: 700px){
+
+  .grid-container{
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: space-between;
+    flex-wrap: wrap;
+    height:auto;
+  }
+  .grid-child-calories,
+  .grid-child-grams {
+      height:auto;
+      flex:1;
+  }
+  .grid-child-calories{
+    order: 1;
+  }
+  
+  .grid-child-grams{
+    order: 2;
+  }
+  .total{
+    order:3;
+  }
+  .addBtn{
+    margin:auto;
+    width: auto;
+  }
+  .addCont{
+    margin:auto;
+    width: auto;
+  }
+  #select-source{
+    margin: auto;
+  }
+}
+
 header {
   background: #00a89d;
   color: white;
@@ -36,14 +74,24 @@ body{
 
 .grid-container{
   width: 80%;
-  position: relative;
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  height:auto;
+
 }
 
 .grid-child-calories{
   /*width: 50%;*/
-  position: absolute;
-  top: 15%;
-  left:15%;
+
+  /* top: 15%;
+  left:15%; */
+  margin:5px;
+  border: tomato dashed 3px; 
+  border-radius: 8px;
+  padding: 4px;
   /*float: left;*/
 }
 
@@ -51,9 +99,12 @@ body{
   
 /*  width: 50%;*/
 
-  position: absolute;
-  top: 55%;
-  left: 55%;
+  /* top: 55%;
+  left: 55%; */
+  margin:5px;
+  border: tomato dashed 3px;
+  border-radius: 8px;
+  padding: 4px;
 
 /*  float: left;*/
 }
@@ -75,9 +126,7 @@ body{
   background-color: white;
 }
 
-.total{
-  text-align: center;
-}
+
 .div-resource{
   margin-left: 20px;
   padding: 8px;
@@ -87,15 +136,24 @@ body{
   margin-left: 4px;
 }
 .addCont{
-  margin-left: 600px;
+  margin: auto;
 }
 .calorie-results-field{
   align-items: center;
 }
 .resources{
-  margin-top: 128px;
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: column;
+  align-items: center;
 }
-
+.total{
+  justify-content: baseline;
+}
 #select-source{
-  margin-left: 575px;
+  margin: auto;
+}
+input{
+  border: black 1px solid;
+  border-radius: 4px
 }
