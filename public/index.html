@@ -36,34 +36,34 @@
     <script type="text/javascript" src="../src/resources.js"></script>
     <div id ="container" align="center">
         <form>
-            <div class="wrapper-calories">
-                <div id="column-one">
-                    <p class="input-calories"> Enter total daily calorie intake
-                    <input id = "targetCalories" name="CalorieIntake" type="text" size="7" value="1500" 
-                    class="calorie-field-style">
-                    </p>
-                    <h3 id="calculator-h3">Enter desired macronutrient percentages %</h3>
-                    <p>
-                        Carbohydrate
-                        <input type="text" id ="carb-per" name="carb-per" value="30"  size="4">
-                    </p>
-                    <p>
-                        Protein
-                        <input type="text" id="protien-per" name="protien-per" value="35" size="4">
-                    </p>
-                    <p>
-                        Fat
-                        <input type="text" id="fat-per" name="fat-per" value="35" size="4">                    
-                    </p>
-                        <div class="inner">
-                        <input type="button" value="Calculate" class="Button" onclick="calc(this.form)">
-                        <input type="reset" value="Reset" name="Reset" class="Button">
-                        </div>
-                        <p> Note: Please make sure that all the percentages add upto 100</p>
-                </div>
-                <div id="column-two" class = "grid-container">
-                <div class="grid-child-calories">
-                <h3 id="calculator-h3">Calories from each macronutrient</h3>
+          <div class="wrapper-calories">
+              <div id="column-one">
+                  <p class="input-calories"> Enter total daily calorie intake
+                  <input id = "targetCalories" name="CalorieIntake" type="text" size="7" value="1500" 
+                  class="calorie-field-style">
+                  </p>
+                  <h3 id="calculator-h3">Enter desired macronutrient percentages %</h3>
+                  <p>
+                      Carbohydrate
+                      <input type="text" id ="carb-per" name="carb-per" value="30"  size="4">
+                  </p>
+                  <p>
+                      Protein
+                      <input type="text" id="protien-per" name="protien-per" value="35" size="4">
+                  </p>
+                  <p>
+                      Fat
+                      <input type="text" id="fat-per" name="fat-per" value="35" size="4">                    
+                  </p>
+                      <div class="inner">
+                      <input type="button" value="Calculate" class="Button" onclick="calc(this.form)">
+                      <input type="reset" value="Reset" name="Reset" class="Button">
+                      </div>
+                      <p> Note: Please make sure that all the percentages add upto 100</p>
+              </div>
+              <div id="column-two" class = "grid-container">
+              <div class="grid-child-calories">
+                <h3 id="calculator-h3">Calories from each macro</h3>
                 <p>
                     Carbs
                     <input name="CarbCalories" type="text" size="7" class="calorie-results-field" placeholder="Carb calories"> 
@@ -76,9 +76,9 @@
                     Fat
                     <input name="FatCalories" type="text" size="7" class="calorie-results-field" placeholder="Fat calories"> 
                 </p>
-                </div>
-                <div class="grid-child-grams">
-                <h3 id="calculator-h3">Grams of each macronutrient</h3>
+              </div>
+              <div class="grid-child-grams">
+                <h3 id="calculator-h3">Grams of each macro</h3>
                 <p>
                     Carbs (g)
                     <input name="CarbGrams" type="text" size="7" class="grams-results-field" placeholder="Carb grams"> </p>
@@ -88,9 +88,9 @@
                 <p>
                     Fat (g)
                     <input name="FatGrams" type="text" size="7" class="grams-results-field" placeholder="Fat grams"></p>
-                </div>
-                </div>
-            </div>
+              </div>
+              </div>
+          </div>
     </form>
     </div>
     <div class = "resources">
@@ -107,7 +107,10 @@
       <input type="button" id = "btnAdd" class="Button addBtn"onclick = "AddDropDownList()" value = "Add Diet Sources" />
       <div id = "dvContainer" class="addCont"></div>
       </div>
-      <p class="total" id="total-resources"></p>
+      <div class="total">
+        <p id="total-resources"></p>
+      </div>
+      
     </div>
 
     <!--
