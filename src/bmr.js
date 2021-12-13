@@ -1,8 +1,5 @@
 var cnt = 0;
-var glocals = 0
-var glocarbs =0
-var gloprot =0 
-var glofats =0
+
 function calc (form) {
      var C, P, F 
      
@@ -34,14 +31,38 @@ function calc (form) {
 }
 
 /*
-Dairy 
-Veg 
-Non Veg
-Nuts
-seeds 
-millets
+	Dairy 
+	Veg 
+	Non Veg
+	Nuts
+	seeds 
+	millets 
+ */
+let resources = [];
 
-*/
+const updateResult = () =>{
+	var glocals = 0
+	var glocarbs = 0
+	var gloprot = 0 
+	var glofats = 0
+
+	resources.forEach((resource)=>{
+		glocals += resource.cal;
+		glocarbs += resource.c;
+		gloprot += resource.p;
+		glofats += resource.f;
+	});
+	var total ="Total Calories ="+ glocals +" Carbs ="+ 
+		glocarbs +" Protien ="+ gloprot  +" Fats ="+ glofats
+	var totalcls = document.getElementById("total-resources")
+	if(resources.length<1){
+		totalcls.innerHTML = "";
+	}
+	else{
+		totalcls.innerHTML = total;
+	}
+};
+
 function AddDropDownList() {
 	//Build an array containing Customer records.
 	var category = [
@@ -124,32 +145,50 @@ function AddDropDownList() {
 	addBtn.value = "Add Resource";
 	addBtn.type = "button";
 	addBtn.className = "Button";
+	addBtn.id = "addButton";
 
 	var div = document.createElement("DIV");
-	div.className = "div-resource"
+	div.className = "div-resource";
+	div.id = "div-id-resource"
 	div.appendChild(selcat);
 
+
+
 	addBtn.onclick = function(){
-		var ind = cat.findIndex(x=>x.Name===selcat.value)
+
+		var ind = cat.findIndex(x=>x.Name===selcat.value);
+		var radio = document.createElement("INPUT");
+		radio.type = 'checkbox';
+		radio.id = 'chk' + selcat.value;
+		radio.value = selcat.value;
+		radio.name = 'para-val';
+
 		var resval = document.createElement("P");
-		var qun = cat[ind].Quantity 
+		resval.id = "p"+ selcat.value;
+		resval.className = "res-para";
+
+		var qun = cat[ind].Quantity;
 		var cals = cat[ind].cal
 		var carbs = cat[ind].c 
 		var prot = cat[ind].p
 		var fats = cat[ind].f
+
 		var res ="Name = "+cat[ind].Name+ "  Quantity = "+qun+" Calories ="+ cals +" Carbs ="+ 
 		carbs +" Protien ="+ prot  +" Fats ="+ fats
 		resval.innerHTML = res;
 		cnt++;
+		let resource = {};
+		resource.name = cat[ind].Name;
+		resource.cal = cals;
+		resource.c = carbs;
+		resource.p = prot
+		resource.f = fats
+		
+		resources.push(resource);
+		updateResult();
+
+		div.appendChild(radio);
 		div.appendChild(resval);
-		glocals += cals
-		glocarbs += carbs
-		gloprot += prot
-		glofats += fats
-		var total ="Total Calories ="+ glocals +" Carbs ="+ 
-		glocarbs +" Protien ="+ gloprot  +" Fats ="+ glofats
-		var totalcls = document.getElementById("total-resources")
-		totalcls.innerHTML = total
 	}
 
 	//Create a Remove Button.
@@ -157,8 +196,37 @@ function AddDropDownList() {
 	btnRemove.value = "Remove";
 	btnRemove.type = "button";
 	btnRemove.className = "Button"
+
 	btnRemove.onclick = function () {
-		dvContainer.removeChild(this.parentNode);
+
+		const checkboxes = document.querySelectorAll('input[name="para-val"]:checked');
+		let colors = [];
+
+		checkboxes.forEach((checkbox) => {
+    		colors.push(checkbox.value);
+		});
+
+		if(colors.length===0){
+			dvContainer.removeChild(this.parentNode);
+		}
+		else{
+			checkboxes.forEach((checkbox)=>{
+				const value = checkbox.value;
+
+				var id = document.getElementById('p'+value);
+				id.parentNode.removeChild(id);
+
+				id = document.getElementById('chk' + value);
+				id.parentNode.removeChild(id);
+
+				var parr = resources.findIndex( (x) => x.name === value);
+				console.log(parr, value);
+				if( parr>-1){
+					resources.splice(parr, 1);
+				}
+				updateResult();
+			});
+		}
 	};
 
 
