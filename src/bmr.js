@@ -93,34 +93,26 @@ function AddDropDownList() {
 
 	//Reference the container DIV.
 	var dvContainer = document.getElementById("dvContainer");
-	// var selval = document.createElement("P");
-	// selval.innerHTML = sel;
-	// dvContainer.appendChild(selval);
+
 	var cat;
 	//console.log(sel)
 	if(sel==="Dairy"){
-		//console.log(category_dairy);
 		cat = category_dairy
 	}
 	else if(sel==="Nuts")
 	{
-		//console.log(category_nuts)
 		cat = category_nuts
 	}
 	else if(sel==="Veg"){
-		//console.log(category_veg)
 		cat = category_veg
 	}
 	else if(sel==="Millets"){
-		//console.log(category_millets)
 		cat = category_millets
 	}
 	else if(sel=="Seeds"){
-		//console.log(category_seeds)
 		cat = category_seeds
 	}
 	else{
-		//console.log(category_non_veg)
 		cat = category_non_veg
 	}
 	console.log(cat);
@@ -220,7 +212,7 @@ function AddDropDownList() {
 				id.parentNode.removeChild(id);
 
 				var parr = resources.findIndex( (x) => x.name === value);
-				console.log(parr, value);
+
 				if( parr>-1){
 					resources.splice(parr, 1);
 				}
