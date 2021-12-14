@@ -232,7 +232,7 @@ function AddDropDownList() {
 		res_div.appendChild(radio);
 		res_div.appendChild(resval);
 
-		div.appendChild(res_div);
+		div_main.appendChild(res_div);
 	}
 
 	//Create a Remove Button. 
@@ -243,7 +243,6 @@ function AddDropDownList() {
 	//Add the Remove Buttton to DIV.
 	div_select.appendChild(selcat);
 	div_select.appendChild(addBtn);
-	dvContainer.appendChild(div_select);
 
 
 	var div_content = document.createElement("DIV");
