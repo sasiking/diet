@@ -94,8 +94,8 @@
     </form>
     </div>
     <div class = "resources">
-      <div>
-        <select name="slec" id="select-source" >
+      <div class="resources-dropdown">
+        <select name="slec" id="select-source" class="resource-select">
           <option value="Dairy" selected>Dairy</option>
           <option value="Veg">Veg</option>
           <option value="Non-Veg">Non-Veg</option>
@@ -103,15 +103,20 @@
           <option value="Nuts">Nuts</option>
           <option value="Millets">Millets</option>
         </select>
-  
-      <input type="button" id = "btnAdd" class="Button addBtn"onclick = "AddDropDownList()" value = "Add Diet Sources" />
-      <div id = "dvContainer" class="addCont"></div>
+        <input type="button" id = "btnAdd" class="Button addBtn"onclick = "AddDropDownList()" value = "Add Diet Sources" />
+        <input type="button" class="Button Remove" onclick="btnRemove()" value = "Remove">
       </div>
+      <div id = "dvContainer" class="addCont"></div>
       <div class="total">
         <p id="total-resources"></p>
       </div>
       
     </div>
+    <!-- <footer class="main-footer">
+      <nav>
+          <a href="https://www.github.com/sasiking" class="main-footer-a">Created by SasiKing</a>
+      </nav> -->
+  </footer>
 
     <!--
       This HTML file is a template.
