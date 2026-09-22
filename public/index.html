@@ -6,39 +6,31 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet"/>
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Web site created using create-react-app" />
+    <meta name="description" content="Diet calculation and macro tracker application" />
     <link rel="stylesheet" href="../src/Script.css">
     <link rel="shortcut icon" type="image/png" href="favicon.ico">
     <title>Diet Calculation App</title>
   </head>
   <body>
-    <!-- HEADER WITH CLICKABLE LINK TO LOCAL BUILDER.HTML -->
-    <header style="text-align: center; margin: 20px 0 30px 0;">
-      <h1 style="margin-bottom: 12px;">Diet Calculator</h1>
-      
-      <!-- Clickable Button Link to src/builder.html -->
-      <a href="../src/builder.html" 
-         target="_self"
-         style="display: inline-block; 
-                background-color: #2563eb; 
-                color: #ffffff; 
-                padding: 10px 20px; 
-                border-radius: 6px; 
-                font-family: 'Roboto', sans-serif; 
-                font-size: 14px; 
-                font-weight: 700; 
-                text-decoration: none; 
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-                transition: background 0.2s ease;">
-        ⚡ Open Polity Notes Builder Studio &rarr;
-      </a>
+    <!-- APPLICATION HEADER WITH INTEGRATED BUILDER NAVIGATION -->
+    <header>
+      <h1>Diet Calculator</h1>
+      <div class="studio-nav-wrapper">
+        <a href="../src/builder.html" class="studio-nav-btn" target="_self">
+          ⚡ Open Polity Notes Builder Studio &rarr;
+        </a>
+      </div>
     </header>
 
+    <!-- SCRIPTS -->
     <script type="text/javascript" src="../src/bmr.js"></script>
     <script type="text/javascript" src="../src/resources.js"></script>
+
+    <!-- MAIN CALCULATOR INTERFACE -->
     <div id="container" align="center">
       <form>
         <div class="wrapper-calories">
+          <!-- COLUMN 1: INPUT TARGETS & MACRO RATIOS -->
           <div id="column-one">
             <p class="input-calories"> Enter total daily calorie intake
               <input id="targetCalories" name="CalorieIntake" type="text" size="7" value="1500" class="calorie-field-style">
@@ -62,6 +54,8 @@
             </div>
             <p>Note: Please make sure that all the percentages add upto 100</p>
           </div>
+
+          <!-- COLUMN 2: CALCULATED SPLITS (CALORIES & GRAMS) -->
           <div id="column-two" class="grid-container">
             <div class="grid-child-calories">
               <h3 id="calculator-h3">Calories from each macro</h3>
@@ -98,6 +92,7 @@
       </form>
     </div>
     
+    <!-- FOOD SOURCE SELECTION & AGGREGATION ZONE -->
     <div class="resources">
       <div class="resources-dropdown">
         <select name="slec" id="select-source" class="resource-select">
