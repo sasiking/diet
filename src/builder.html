@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polity Notes Visual Builder Studio (Modular Mains Engine)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Kalam:wght@300;400;700&family=Patrick+Hand&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #fbfbf9;
+      --ruled-line: #e3ebf5;
+      --margin-line: #f7a8b8;
+      --ink-blue: #0f3870;
+      --ink-dark: #1e293b;
+      --ink-red: #b91c1c;
+      --ink-green: #15803d;
+      --ink-purple: #6b21a8;
+      --ink-orange: #c2410c;
+      --ink-yellow: #a16207;
+      --ink-teal: #0f766e;
+      --ink-cyan: #0369a1;
+      --ink-indigo: #4338ca;
+      --ink-rose: #be123c;
+      --ink-amber: #b45309;
+      --ink-emerald: #047857;
+      --ink-violet: #7c2d12;
+      --highlight-yellow: rgba(254, 240, 138, 0.75);
+      --highlight-green: rgba(187, 247, 208, 0.65);
+      --highlight-pink: rgba(251, 207, 232, 0.65);
+      --highlight-blue: rgba(186, 230, 253, 0.65);
+      --sticky-yellow: #fef9c3;
+      --sticky-pink: #ffe4e6;
+      --sticky-blue: #e0f2fe;
+      --shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #0f172a;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ================= SIDEBAR TOOLBOX ================= */
+    .toolbox {
+      width: 340px;
+      min-width: 340px;
+      background: #1e293b;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      border-right: 2px solid #334155;
+      z-index: 100;
+    }
+
+    .toolbox-header {
+      padding: 16px;
+      background: #0f172a;
+      border-bottom: 1px solid #334155;
+    }
+
+    .toolbox-header h2 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #93c5fd;
+    }
+
+    .toolbox-items {
+      padding: 14px;
+      overflow-y: auto;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tool-group-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #94a3b8;
+      letter-spacing: 0.8px;
+      margin-top: 10px;
+      margin-bottom: 2px;
+    }
+
+    .tool-btn {
+      background: #334155;
+      color: #f8fafc;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #475569;
+      cursor: pointer;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .tool-btn:hover {
+      background: #2563eb;
+      border-color: #60a5fa;
+      transform: translateX(3px);
+    }
+
+    .actions-panel {
+      padding: 14px;
+      border-top: 1px solid #334155;
+      background: #0f172a;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 9px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-import { background: #6366f1; color: white; }
+    .btn-import:hover { background: #818cf8; }
+    .btn-export { background: #059669; color: white; }
+    .btn-export:hover { background: #10b981; }
+    .btn-print { background: #2563eb; color: white; }
+    .btn-print:hover { background: #3b82f6; }
+    .btn-clear { background: #dc2626; color: white; }
+    .btn-clear:hover { background: #ef4444; }
+
+    /* ================= DYNAMIC CANVAS ARCHITECTURE ================= */
+    .canvas-wrapper {
+      flex-grow: 1;
+      background: #64748b;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 30px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+    }
+
+    .notebook-container {
+      width: 100%;
+      max-width: 980px;
+      min-height: 1200px;
+      height: auto;
+      background-color: var(--bg-page);
+      background-image: 
+        linear-gradient(90deg, transparent 48px, var(--margin-line) 48px, var(--margin-line) 50px, transparent 50px),
+        linear-gradient(var(--ruled-line) 1px, transparent 1px);
+      background-size: 100% 28px, 100% 28px;
+      background-repeat: repeat-y, repeat;
+      padding: 35px 35px 80px 65px;
+      border-radius: 4px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      line-height: 28px;
+      font-family: 'Kalam', cursive, sans-serif;
+      color: var(--ink-dark);
+      position: relative;
+      margin-bottom: 50px;
+    }
+
+    /* Element Wrapper & Action Controls */
+    .block-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+      break-inside: avoid;
+    }
+
+    .block-controls {
+      position: absolute;
+      top: -12px;
+      right: 4px;
+      display: none;
+      gap: 4px;
+      background: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      z-index: 10;
+    }
+
+    .block-wrapper:hover .block-controls {
+      display: flex;
+    }
+
+    .control-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 11px;
+      padding: 2px 4px;
+      font-family: sans-serif;
+    }
+
+    .control-btn:hover {
+      color: #f87171;
+    }
+
+    /* CARD LOCAL TOOLBAR */
+    .card-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 8px;
+      background: #f1f5f9;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px dashed #cbd5e1;
+      user-select: none;
+    }
+
+    .color-swatches {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 1px solid rgba(0,0,0,0.2);
+    }
+
+    .swatch:hover {
+      transform: scale(1.25);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .card-tool-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      padding: 2px 6px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .card-tool-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 { font-family: 'Caveat', cursive; font-weight: 700; }
+    
+    .title-section { text-align: center; border-bottom: 3px double var(--ink-blue); padding-bottom: 12px; margin-bottom: 20px; }
+    .title-section h1 { font-size: 40px; color: var(--ink-blue); letter-spacing: 0.5px; line-height: 1.15; }
+    .title-section .subtitle { font-size: 20px; color: var(--ink-red); font-family: 'Patrick Hand', cursive; }
+    .badge-tag { display: inline-block; background: var(--ink-purple); color: #fff; padding: 2px 14px; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 800; margin-top: 4px; }
+
+    .section-header { font-size: 26px; color: var(--ink-red); margin: 24px 0 10px 0; display: flex; align-items: center; border-bottom: 2px dashed rgba(185, 28, 28, 0.4); padding-bottom: 2px; }
+    .section-header span { background: var(--highlight-yellow); padding: 0 8px; border-radius: 4px; }
+
+    /* Grids */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 12px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 12px; }
+    .grid-col { display: flex; flex-direction: column; }
+
+    /* Thematic Cards */
+    .card-note { background: rgba(255,255,255,0.88); border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 12px 16px; box-shadow: var(--shadow); margin-bottom: 12px; }
+    .card-note.blue   { border-left: 5px solid var(--ink-blue); }
+    .card-note.green  { border-left: 5px solid var(--ink-green); }
+    .card-note.purple { border-left: 5px solid var(--ink-purple); }
+    .card-note.red    { border-left: 5px solid var(--ink-red); }
+    .card-note.orange { border-left: 5px solid var(--ink-orange); }
+    .card-note.yellow { border-left: 5px solid var(--ink-yellow); }
+    .card-note.teal   { border-left: 5px solid var(--ink-teal); }
+    .card-note.cyan   { border-left: 5px solid var(--ink-cyan); }
+    .card-note.indigo { border-left: 5px solid var(--ink-indigo); }
+    .card-note.rose   { border-left: 5px solid var(--ink-rose); }
+    .card-note.amber  { border-left: 5px solid var(--ink-amber); }
+
+    .bullet-list { list-style: none; padding-left: 2px; }
+    .bullet-list li { margin-bottom: 5px; position: relative; padding-left: 22px; font-size: 16px; line-height: 24px; min-height: 24px; }
+    .bullet-list li::before { content: "➔"; position: absolute; left: 0; color: var(--ink-blue); font-weight: bold; }
+
+    .sub-point { margin-left: 18px; padding-left: 10px; border-left: 2px dashed #94a3b8; font-size: 15px; line-height: 22px; margin-top: 4px; margin-bottom: 8px; min-height: 22px; }
+
+    /* Sticky Notes */
+    .sticky { padding: 14px 16px; border-radius: 2px; box-shadow: 2px 4px 10px rgba(0,0,0,0.1); transform: rotate(-0.5deg); margin: 12px 0; font-size: 15.5px; line-height: 22px; font-family: 'Patrick Hand', cursive; }
+    .sticky.yellow { background: var(--sticky-yellow); border-top: 8px solid #fef08a; }
+    .sticky.pink { background: var(--sticky-pink); border-top: 8px solid #fbcfe8; transform: rotate(0.6deg); }
+    .sticky.blue { background: var(--sticky-blue); border-top: 8px solid #bae6fd; }
+
+    /* Highlight Spans */
+    .hl-yellow { background: var(--highlight-yellow); padding: 0 4px; border-radius: 3px; }
+    .hl-green  { background: var(--highlight-green); padding: 0 4px; border-radius: 3px; }
+    .hl-pink   { background: var(--highlight-pink); padding: 0 4px; border-radius: 3px; }
+    .hl-blue   { background: var(--highlight-blue); padding: 0 4px; border-radius: 3px; }
+
+    /* Dropdowns */
+    .reveal-box { margin-top: 8px; border-radius: 5px; overflow: hidden; }
+    .reveal-box summary { cursor: pointer; user-select: none; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; color: #1e40af; background: #eff6ff; border: 1px dashed #93c5fd; padding: 6px 12px; border-radius: 5px; outline: none; transition: background 0.2s ease; list-style: none; display: flex; align-items: center; gap: 6px; }
+    .reveal-box summary::-webkit-details-marker { display: none; }
+    .reveal-box summary::before { content: "▶"; font-size: 11px; color: #2563eb; transition: transform 0.2s ease; }
+    .reveal-box[open] summary::before { transform: rotate(90deg); }
+    .reveal-box[open] summary { background: #dbeafe; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+    .reveal-content { background: #f8fafc; border: 1px dashed #93c5fd; border-top: none; padding: 8px 12px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
+
+    /* MCQ Cards */
+    .mcq-card { background: #ffffff; border: 1px solid #cbd5e1; border-left: 5px solid #2563eb; border-radius: 6px; padding: 12px 14px; margin-bottom: 12px; box-shadow: 2px 2px 5px rgba(0,0,0,0.04); }
+    .mcq-badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; background-color: #dbeafe; color: #1e40af; padding: 2px 7px; border-radius: 4px; margin-bottom: 6px; font-family: 'Inter', sans-serif; }
+    .mcq-options { margin: 6px 0 8px 14px; font-size: 14.5px; line-height: 22px; }
+
+    /* Tables */
+    .hand-table { width: 100%; border-collapse: collapse; margin: 10px 0 16px 0; background: rgba(255,255,255,0.85); font-size: 15px; }
+    .hand-table th, .hand-table td { border: 1px solid #94a3b8; padding: 7px 10px; text-align: left; line-height: 20px; }
+    .hand-table th { background: #e2e8f0; color: var(--ink-blue); font-family: 'Caveat', cursive; font-size: 19px; }
+
+    /* Exam Traps */
+    .exam-trick { background: #fff1f2; border: 2px dashed var(--ink-red); border-radius: 8px; padding: 14px 18px; margin: 16px 0; position: relative; }
+    .exam-trick::before { content: "⚡ TOPPER'S RED ALERT: CONSTITUTIONAL TRAPS ⚡"; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 800; color: var(--ink-red); position: absolute; top: -11px; left: 18px; background: #fff; padding: 0 8px; border: 1px solid var(--ink-red); border-radius: 4px; }
+
+    /* Mains Section Styling */
+    .mains-section { background: #fffafa; border: 2px solid #7f1d1d; border-radius: 8px; padding: 20px 20px 14px 20px; margin: 24px 0 10px 0; position: relative; box-shadow: 0 5px 15px rgba(127, 29, 29, 0.08); }
+    .mains-section::before { content: "✍ APPSC MAINS PRACTICE & PREVIOUS YEAR QUESTIONS (PYQs)"; font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 900; letter-spacing: 0.5px; color: #ffffff; position: absolute; top: -12px; left: 20px; background: #991b1b; padding: 2px 12px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+    .hl-dark-red { background-color: #991b1b; color: #ffffff; padding: 1px 7px; border-radius: 4px; font-weight: bold; font-size: 14px; display: inline-block; font-family: 'Inter', sans-serif; }
+    
+    .mains-q-item { 
+      position: relative; 
+      margin-bottom: 14px; 
+      border-bottom: 1px dashed rgba(153, 27, 27, 0.25); 
+      padding-bottom: 12px; 
+    }
+    .mains-q-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .mains-q-title { font-size: 17px; color: #7f1d1d; font-weight: 700; line-height: 24px; padding-right: 40px; }
+    .mains-framework { font-size: 15px; color: #334155; margin-top: 4px; padding-left: 10px; border-left: 2.5px solid #991b1b; line-height: 22px; }
+
+    /* In-Box Mains Question Toolbar */
+    .mains-box-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(153, 27, 27, 0.15);
+      user-select: none;
+    }
+
+    .mains-item-controls {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: none;
+      gap: 3px;
+    }
+    .mains-q-item:hover .mains-item-controls {
+      display: flex;
+    }
+
+    /* Print settings */
+    @media print {
+      body { background: none; }
+      .toolbox, .card-toolbar, .mains-box-toolbar, .mains-item-controls { display: none !important; }
+      .canvas-wrapper { padding: 0; background: none; height: auto; overflow: visible; }
+      .block-controls { display: none !important; }
+      .reveal-box { display: block !important; }
+      .reveal-box summary { display: none !important; }
+      .reveal-content { display: block !important; border-top: 1px dashed #93c5fd !important; }
+      .notebook-container { box-shadow: none; width: 100%; max-width: 100%; padding: 10px 15px 15px 45px; margin-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LEFT TOOLBOX -->
+  <aside class="toolbox">
+    <div class="toolbox-header">
+      <h2>Notes Element Studio</h2>
+      <p style="font-size:12px; color:#94a3b8; margin-top:2px;">Import, edit existing HTML or build fresh</p>
+    </div>
+    
+    <div class="toolbox-items">
+      <div class="tool-group-title">Layout & Structure</div>
+      <button class="tool-btn" onclick="insertBlock('banner')">🏷️ Blank Title Banner</button>
+      <button class="tool-btn" onclick="insertBlock('header')">📌 Section Header</button>
+      <button class="tool-btn" onclick="insertBlock('grid-2')">🔲 Blank 2-Column Side-by-Side</button>
+      <button class="tool-btn" onclick="insertBlock('table-blank')">📊 Blank Comparison Table</button>
+
+      <div class="tool-group-title">Thematic Single Cards</div>
+      <button class="tool-btn" onclick="insertBlock('card-blue')">📘 Blank Card (Blue)</button>
+      <button class="tool-btn" onclick="insertBlock('card-yellow')">📒 Blank Card (Yellow)</button>
+      <button class="tool-btn" onclick="insertBlock('card-teal')">🩵 Blank Card (Teal)</button>
+      <button class="tool-btn" onclick="insertBlock('card-green')">📗 Blank Card (Green)</button>
+      <button class="tool-btn" onclick="insertBlock('card-purple')">🔮 Blank Card (Purple)</button>
+      <button class="tool-btn" onclick="insertBlock('card-red')">📕 Blank Card (Red)</button>
+
+      <div class="tool-group-title">High-Yield Exam Elements</div>
+      <button class="tool-btn" onclick="insertBlock('sticky-yellow')">📌 Blank Sticky Note (Yellow)</button>
+      <button class="tool-btn" onclick="insertBlock('sticky-pink')">📌 Blank Sticky Note (Pink)</button>
+      <button class="tool-btn" onclick="insertBlock('exam-trap')">⚡ Blank Exam Trap Box</button>
+      <button class="tool-btn" onclick="insertBlock('mcq-dropdown')">❓ Blank Prelims MCQ (Dropdown)</button>
+
+      <div class="tool-group-title">Mains Engine</div>
+      <!-- Appends directly into existing Mains box if available -->
+      <button class="tool-btn" onclick="insertMainsQuestion()">✍️ Add Mains Question (Q1, Q2...)</button>
+    </div>
+
+    <!-- Hidden file input for importing existing notes -->
+    <input type="file" id="htmlFileInput" accept=".html,.htm" style="display: none;" onchange="handleFileSelect(event)">
+
+    <div class="actions-panel">
+      <button class="action-btn btn-import" onclick="document.getElementById('htmlFileInput').click()">📂 Open & Edit HTML File</button>
+      <button class="action-btn btn-export" onclick="exportCleanHTML()">💾 Download Clean HTML</button>
+      <button class="action-btn btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      <button class="action-btn btn-clear" onclick="clearCanvas()">🗑️ Clear Canvas</button>
+    </div>
+  </aside>
+
+  <!-- WORKSPACE CANVAS -->
+  <main class="canvas-wrapper">
+    <div class="notebook-container" id="editorCanvas">
+      <!-- Starts clean and auto-expands downwards as blocks are appended or imported -->
+    </div>
+  </main>
+
+  <script>
+    function getCardToolbarHTML() {
+      return `
+        <div class="card-toolbar" contenteditable="false">
+          <div class="color-swatches">
+            <span style="font-size:10px; font-weight:700; color:#64748b; margin-right:3px;">INK:</span>
+            <div class="swatch" style="background:#0f3870;" onclick="changeCardColor(this, 'blue')"></div>
+            <div class="swatch" style="background:#a16207;" onclick="changeCardColor(this, 'yellow')"></div>
+            <div class="swatch" style="background:#0f766e;" onclick="changeCardColor(this, 'teal')"></div>
+            <div class="swatch" style="background:#15803d;" onclick="changeCardColor(this, 'green')"></div>
+            <div class="swatch" style="background:#6b21a8;" onclick="changeCardColor(this, 'purple')"></div>
+            <div class="swatch" style="background:#b91c1c;" onclick="changeCardColor(this, 'red')"></div>
+            <div class="swatch" style="background:#be123c;" onclick="changeCardColor(this, 'rose')"></div>
+            <div class="swatch" style="background:#b45309;" onclick="changeCardColor(this, 'amber')"></div>
+          </div>
+          <div class="card-actions">
+            <button class="card-tool-btn" onclick="addBulletToCard(this)">+ Bullet</button>
+            <button class="card-tool-btn" onclick="addSubpointToCard(this)">+ Sub-point</button>
+            <button class="card-tool-btn" onclick="addStickyToCard(this, 'yellow')" style="background:#fef9c3; border-color:#fef08a;">+ 🟡 Sticky</button>
+            <button class="card-tool-btn" onclick="addStickyToCard(this, 'pink')" style="background:#ffe4e6; border-color:#fbcfe8;">+ 🌸 Sticky</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function getMainsBoxToolbarHTML() {
+      return `
+        <div class="mains-box-toolbar" contenteditable="false">
+          <button class="card-tool-btn" onclick="insertMainsQuestionDirect(this)" style="background:#fee2e2; border-color:#f87171; color:#991b1b;">
+            + Add Another Question to this Section
+          </button>
+        </div>
+      `;
+    }
+
+    function getSingleMainsQuestionItemHTML(qNum) {
+      return `
+        <div class="mains-q-item">
+          <div class="mains-item-controls" contenteditable="false">
+            <button class="control-btn" style="background:#991b1b;" onclick="this.closest('.mains-q-item').remove()">✕</button>
+          </div>
+          <div class="mains-q-title" contenteditable="true">
+            <span class="hl-dark-red">Mains Practice • 10 Marks</span> 
+            <strong>Q${qNum}. "Write descriptive analytical question statement here."</strong>
+          </div>
+          <details class="reveal-box" style="margin-top:8px;">
+            <summary>View Model Answer Structuring Framework</summary>
+            <div class="reveal-content">
+              <div class="mains-framework" contenteditable="true" style="background-color: #ffffff; padding: 8px 10px; margin-top: 2px;">
+                <strong>Answer Framework:</strong><br>
+                • <em>Introduction:</em> Contextualize the constitutional articles and core premise.<br>
+                • <em>Core Analysis / Judicial Evolution:</em> Add landmark cases and constitutional amendments.<br>
+                • <em>Conclusion & Way Forward:</em> Provide actionable policy/constitutional remedies.
+              </div>
+            </div>
+          </details>
+        </div>
+      `;
+    }
+
+    const templates = {
+      banner: `
+        <div class="title-section" contenteditable="true">
+          <div class="badge-tag">EXAM TAG / PAPER SPECIFICATION</div>
+          <h1>Main Title Here</h1>
+          <div class="subtitle">Subtitle • Scope of Topic • Core Jurisprudence</div>
+        </div>`,
+
+      header: `
+        <div class="section-header" contenteditable="true">
+          <span>Section Header</span>
+        </div>`,
+      
+      'grid-2': `
+        <div class="grid-2">
+          <!-- Col 1 -->
+          <div class="grid-col" id="col1">
+            <div class="card-note blue">
+              ${getCardToolbarHTML()}
+              <h3 contenteditable="true" style="color:var(--ink-blue); font-size:20px;">Column 1 Title</h3>
+              <ul class="bullet-list" contenteditable="true">
+                <li><strong>Point 1:</strong> Description...</li>
+                <div class="sub-point">▫ <strong>Detail / Note:</strong> Elaboration...</div>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Col 2 -->
+          <div class="grid-col" id="col2">
+            <div class="card-note green">
+              ${getCardToolbarHTML()}
+              <h3 contenteditable="true" style="color:var(--ink-green); font-size:20px;">Column 2 Title</h3>
+              <ul class="bullet-list" contenteditable="true">
+                <li><strong>Point 1:</strong> Description...</li>
+                <div class="sub-point">▫ <strong>Detail / Note:</strong> Elaboration...</div>
+              </ul>
+            </div>
+          </div>
+        </div>`,
+
+      'card-blue': `
+        <div class="card-note blue">
+          ${getCardToolbarHTML()}
+          <h3 contenteditable="true" style="color:var(--ink-blue); font-size:20px;">Card Title</h3>
+          <ul class="bullet-list" contenteditable="true">
+            <li><strong>Core Provision:</strong> Description...</li>
+            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
+          </ul>
+        </div>`,
+
+      'card-yellow': `
+        <div class="card-note yellow">
+          ${getCardToolbarHTML()}
+          <h3 contenteditable="true" style="color:var(--ink-yellow); font-size:20px;">Card Title</h3>
+          <ul class="bullet-list" contenteditable="true">
+            <li><strong>Core Provision:</strong> Description...</li>
+            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
+          </ul>
+        </div>`,
+
+      'card-teal': `
+        <div class="card-note teal">
+          ${getCardToolbarHTML()}
+          <h3 contenteditable="true" style="color:var(--ink-teal); font-size:20px;">Card Title</h3>
+          <ul class="bullet-list" contenteditable="true">
+            <li><strong>Core Provision:</strong> Description...</li>
+            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
+          </ul>
+        </div>`,
+
+      'card-green': `
+        <div class="card-note green">
+          ${getCardToolbarHTML()}
+          <h3 contenteditable="true" style="color:var(--ink-green); font-size:20px;">Card Title</h3>
+          <ul class="bullet-list" contenteditable="true">
+            <li><strong>Core Provision:</strong> Description...</li>
+            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
+          </ul>
+        </div>`,
+
+      'card-purple': `
+        <div class="card-note purple">
+          ${getCardToolbarHTML()}
+          <h3 contenteditable="true" style="color:var(--ink-purple); font-size:20px;">Card Title</h3>
+          <ul class="bullet-list" contenteditable="true">
+            <li><strong>Core Provision:</strong> Description...</li>
+            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
+          </ul>
+        </div>`,
+
+      'card-red': `
+        <div class="card-note red">
+          ${getCardToolbarHTML()}
+          <h3 contenteditable="true" style="color:var(--ink-red); font-size:20px;">Card Title</h3>
+          <ul class="bullet-list" contenteditable="true">
+            <li><strong>Core Provision:</strong> Description...</li>
+            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
+          </ul>
+        </div>`,
+
+      'sticky-yellow': `
+        <div class="sticky yellow" contenteditable="true">
+          📌 <strong>Exam Catch / Summary Note:</strong><br>
+          Write your speed recall shortcut, formula, or exam caveat here.
+        </div>`,
+
+      'sticky-pink': `
+        <div class="sticky pink" contenteditable="true">
+          📌 <strong>Recent Case Law / Amendment Linkage:</strong><br>
+          Add the latest bench verdict or statutory update here.
+        </div>`,
+
+      'exam-trap': `
+        <div class="exam-trick">
+          <ul class="bullet-list" contenteditable="true" style="margin-top:2px;">
+            <li><strong>TRAP: "Common incorrect belief/myth statement here."</strong> ➔ <strong>WRONG!</strong> 
+              <div class="sub-point">
+                ▫ <strong>Constitutional Mandate:</strong> Enter the exact rule, landmark verdict, or statutory reason why this is false.
+              </div>
+            </li>
+          </ul>
+        </div>`,
+
+      'mcq-dropdown': `
+        <div class="mcq-card">
+          <span class="mcq-badge" contenteditable="true">EXAM BADGE</span>
+          <div contenteditable="true" style="font-weight: 600; font-size: 15px; margin-bottom: 4px;">
+            Q. Write your question prompt here?
+          </div>
+          <div class="mcq-options" contenteditable="true">
+            1) Option 1<br>
+            2) Option 2<br>
+            3) Option 3<br>
+            4) Option 4
+          </div>
+          <details class="reveal-box">
+            <summary>Show Answer & Constitutional Catch</summary>
+            <div class="reveal-content">
+              <div contenteditable="true" style="background-color: #ffffff; padding: 8px 10px; margin-top: 2px;">
+                ➔ <strong>Correct Answer:</strong> <span class="hl-pink">Option Number</span><br>
+                ▫ <strong>Explanation:</strong> Add explanation and legal basis here.
+              </div>
+            </div>
+          </details>
+        </div>`,
+
+      'table-blank': `
+        <table class="hand-table" contenteditable="true" style="margin: 10px 0 12px 0; font-size: 14px;">
+          <thead>
+            <tr>
+              <th style="width: 25%;">Parameter</th>
+              <th style="width: 37.5%;">Category A</th>
+              <th style="width: 37.5%;">Category B</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Dimension 1</strong></td>
+              <td>Details...</td>
+              <td>Details...</td>
+            </tr>
+            <tr>
+              <td><strong>Dimension 2</strong></td>
+              <td>Details...</td>
+              <td>Details...</td>
+            </tr>
+          </tbody>
+        </table>`
+    };
+
+    function wrapInBlock(htmlContent) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'block-wrapper';
+      wrapper.innerHTML = `
+        <div class="block-controls">
+          <button class="control-btn" onclick="moveUp(this)">▲</button>
+          <button class="control-btn" onclick="moveDown(this)">▼</button>
+          <button class="control-btn" onclick="deleteBlock(this)">✕</button>
+        </div>
+        ${htmlContent}
+      `;
+      return wrapper;
+    }
+
+    function insertBlock(type) {
+      const canvas = document.getElementById('editorCanvas');
+      const block = wrapInBlock(templates[type]);
+      canvas.appendChild(block);
+      block.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    /* ========================================================
+       SMART MAINS QUESTION INSERTER
+       ======================================================== */
+    function insertMainsQuestion() {
+      const canvas = document.getElementById('editorCanvas');
+      let mainsSection = canvas.querySelector('.mains-section');
+
+      if (!mainsSection) {
+        // Create the container if it doesn't exist
+        const initialHTML = `
+          <div class="mains-section">
+            ${getSingleMainsQuestionItemHTML(1)}
+            ${getMainsBoxToolbarHTML()}
+          </div>
+        `;
+        const block = wrapInBlock(initialHTML);
+        canvas.appendChild(block);
+        block.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      } else {
+        // Section exists: calculate next question number and append item directly into it
+        const currentCount = mainsSection.querySelectorAll('.mains-q-item').length;
+        const qNum = currentCount + 1;
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = getSingleMainsQuestionItemHTML(qNum).trim();
+        const newItem = tempDiv.firstChild;
+        
+        const toolbar = mainsSection.querySelector('.mains-box-toolbar');
+        if (toolbar) {
+          mainsSection.insertBefore(newItem, toolbar);
+        } else {
+          mainsSection.appendChild(newItem);
+        }
+        newItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        focusElement(newItem.querySelector('.mains-q-title'));
+      }
+    }
+
+    function insertMainsQuestionDirect(btn) {
+      const mainsSection = btn.closest('.mains-section');
+      if (!mainsSection) return;
+      const currentCount = mainsSection.querySelectorAll('.mains-q-item').length;
+      const qNum = currentCount + 1;
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = getSingleMainsQuestionItemHTML(qNum).trim();
+      const newItem = tempDiv.firstChild;
+      
+      const toolbar = mainsSection.querySelector('.mains-box-toolbar');
+      mainsSection.insertBefore(newItem, toolbar);
+      newItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      focusElement(newItem.querySelector('.mains-q-title'));
+    }
+
+    /* ========================================================
+       IMPORT & PARSE EXISTING NOTES HTML FILE
+       ======================================================== */
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const fileContent = e.target.result;
+        importHTMLContent(fileContent);
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function importHTMLContent(rawHTML) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(rawHTML, 'text/html');
+
+      const sourceContainer = doc.querySelector('.notebook-container') || doc.body;
+      if (!sourceContainer) {
+        alert('Could not locate valid content in this file.');
+        return;
+      }
+
+      const canvas = document.getElementById('editorCanvas');
+      canvas.innerHTML = '';
+
+      const children = Array.from(sourceContainer.children);
+
+      children.forEach(child => {
+        if (child.tagName === 'SCRIPT' || child.tagName === 'STYLE') return;
+
+        // Clean out previous toolbars/controls
+        child.querySelectorAll('.block-controls, .card-toolbar, .mains-box-toolbar, .mains-item-controls').forEach(el => el.remove());
+
+        // Inject toolbars into cards
+        if (child.classList.contains('card-note')) {
+          child.insertAdjacentHTML('afterbegin', getCardToolbarHTML());
+        } else {
+          child.querySelectorAll('.card-note').forEach(c => {
+            if (!c.querySelector('.card-toolbar')) {
+              c.insertAdjacentHTML('afterbegin', getCardToolbarHTML());
+            }
+          });
+        }
+
+        // If it's a mains section, add toolbar & item controls
+        if (child.classList.contains('mains-section') || child.querySelector('.mains-section')) {
+          const section = child.classList.contains('mains-section') ? child : child.querySelector('.mains-section');
+          if (!section.querySelector('.mains-box-toolbar')) {
+            section.insertAdjacentHTML('beforeend', getMainsBoxToolbarHTML());
+          }
+          section.querySelectorAll('.mains-q-item').forEach(item => {
+            item.insertAdjacentHTML('afterbegin', `
+              <div class="mains-item-controls" contenteditable="false">
+                <button class="control-btn" style="background:#991b1b;" onclick="this.closest('.mains-q-item').remove()">✕</button>
+              </div>
+            `);
+          });
+        }
+
+        makeEditable(child);
+
+        if (child.classList.contains('block-wrapper')) {
+          canvas.appendChild(child);
+        } else {
+          const wrapped = wrapInBlock(child.outerHTML);
+          canvas.appendChild(wrapped);
+        }
+      });
+
+      alert('Document loaded successfully! You can now edit text, change card colors, and add new points.');
+    }
+
+    function makeEditable(node) {
+      const editableSelectors = [
+        'h1', 'h2', 'h3', 'h4', 'span', 'p', 'li', 'ul', 'div.sub-point',
+        'div.sticky', 'div.title-section', 'div.section-header', 'div.mains-q-title',
+        'div.mains-framework', 'div.mcq-options', 'table.hand-table', 'div.exam-trick'
+      ];
+
+      editableSelectors.forEach(sel => {
+        node.querySelectorAll(sel).forEach(el => {
+          if (!el.closest('.card-toolbar') && !el.closest('.block-controls') && !el.closest('.mains-box-toolbar') && !el.closest('.mains-item-controls')) {
+            el.setAttribute('contenteditable', 'true');
+          }
+        });
+      });
+
+      if (editableSelectors.some(sel => node.matches && node.matches(sel))) {
+        node.setAttribute('contenteditable', 'true');
+      }
+    }
+
+    /* CARD COLOR & IN-PLACE POINT TOOLS */
+    const colorMap = {
+      blue:   { border: 'blue',   ink: 'var(--ink-blue)' },
+      yellow: { border: 'yellow', ink: 'var(--ink-yellow)' },
+      teal:   { border: 'teal',   ink: 'var(--ink-teal)' },
+      green:  { border: 'green',  ink: 'var(--ink-green)' },
+      purple: { border: 'purple', ink: 'var(--ink-purple)' },
+      red:    { border: 'red',    ink: 'var(--ink-red)' },
+      rose:   { border: 'rose',   ink: 'var(--ink-rose)' },
+      amber:  { border: 'amber',  ink: 'var(--ink-amber)' }
+    };
+
+    function changeCardColor(swatchEl, colorName) {
+      const card = swatchEl.closest('.card-note');
+      if (!card) return;
+      Object.keys(colorMap).forEach(c => card.classList.remove(c));
+      card.classList.add(colorName);
+      const heading = card.querySelector('h3');
+      if (heading) {
+        heading.style.color = colorMap[colorName].ink;
+      }
+    }
+
+    function addBulletToCard(btn) {
+      const card = btn.closest('.card-note');
+      if (!card) return;
+      let list = card.querySelector('.bullet-list');
+      if (!list) {
+        list = document.createElement('ul');
+        list.className = 'bullet-list';
+        list.contentEditable = 'true';
+        card.appendChild(list);
+      }
+      const li = document.createElement('li');
+      li.innerHTML = '<strong>Point:</strong> Description...';
+      list.appendChild(li);
+      focusElement(li);
+    }
+
+    function addSubpointToCard(btn) {
+      const card = btn.closest('.card-note');
+      if (!card) return;
+      const list = card.querySelector('.bullet-list');
+      if (!list) return;
+      const sub = document.createElement('div');
+      sub.className = 'sub-point';
+      sub.innerHTML = '▫ <strong>Note:</strong> Details...';
+      list.appendChild(sub);
+      focusElement(sub);
+    }
+
+    function addStickyToCard(btn, color) {
+      const card = btn.closest('.card-note');
+      if (!card) return;
+      const sticky = document.createElement('div');
+      sticky.className = `sticky ${color}`;
+      sticky.contentEditable = 'true';
+      sticky.innerHTML = `📌 <strong>Note:</strong> Write note here...`;
+      card.appendChild(sticky);
+      focusElement(sticky);
+    }
+
+    function focusElement(el) {
+      el.focus();
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+
+    /* KEYBOARD AUTOMATION ENGINE */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return;
+        const currentEl = selection.anchorNode.nodeType === 3 ? selection.anchorNode.parentElement : selection.anchorNode;
+        
+        // Inside <li> tag
+        const li = currentEl.closest('li');
+        if (li && li.closest('.bullet-list')) {
+          e.preventDefault();
+          if (e.shiftKey) {
+            const sub = document.createElement('div');
+            sub.className = 'sub-point';
+            sub.innerHTML = '▫ <strong>Note:</strong> ';
+            li.after(sub);
+            focusElement(sub);
+          } else {
+            const newLi = document.createElement('li');
+            newLi.innerHTML = '<strong>Point:</strong> ';
+            li.after(newLi);
+            focusElement(newLi);
+          }
+          return;
+        }
+
+        // Inside .sub-point tag
+        const sub = currentEl.closest('.sub-point');
+        if (sub && sub.closest('.bullet-list')) {
+          e.preventDefault();
+          const newLi = document.createElement('li');
+          newLi.innerHTML = '<strong>Point:</strong> ';
+          sub.after(newLi);
+          focusElement(newLi);
+          return;
+        }
+      }
+    });
+
+    function deleteBlock(btn) {
+      btn.closest('.block-wrapper').remove();
+    }
+
+    function moveUp(btn) {
+      const wrapper = btn.closest('.block-wrapper');
+      if (wrapper.previousElementSibling) {
+        wrapper.parentNode.insertBefore(wrapper, wrapper.previousElementSibling);
+      }
+    }
+
+    function moveDown(btn) {
+      const wrapper = btn.closest('.block-wrapper');
+      if (wrapper.nextElementSibling) {
+        wrapper.parentNode.insertBefore(wrapper.nextElementSibling, wrapper);
+      }
+    }
+
+    function clearCanvas() {
+      if (confirm('Clear the entire notebook canvas?')) {
+        document.getElementById('editorCanvas').innerHTML = '';
+      }
+    }
+
+    function exportCleanHTML() {
+      const canvasClone = document.getElementById('editorCanvas').cloneNode(true);
+      
+      // Clean UI tools, in-card controls & editable attributes
+      canvasClone.querySelectorAll('.block-controls, .card-toolbar, .mains-box-toolbar, .mains-item-controls').forEach(el => el.remove());
+      canvasClone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+
+      const fullHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polity Notes Output</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Kalam:wght@300;400;700&family=Patrick+Hand&family=Inter:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  ${document.querySelector('style').innerHTML}
+  body { background-color: #cbd5e1; display:flex; justify-content:center; padding:25px 10px; height:auto; overflow:visible; }
+  .canvas-wrapper { height: auto; overflow: visible; padding: 0; background: none; }
+  .notebook-container { box-shadow: 0 12px 30px rgba(0,0,0,0.15); margin-bottom: 0; }
+</style>
+</head>
+<body>
+  ${canvasClone.outerHTML}
+</body>
+</html>`;
+
+      const blob = new Blob([fullHTML], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'polity_master_notes.html';
+      a.click();
+    }
+  </script>
+</body>
+</html>
