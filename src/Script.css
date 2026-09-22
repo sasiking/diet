@@ -1,92 +1,59 @@
-*{
-  margin:  0px;
+* {
+  margin: 0px;
   padding: 0.80px;
   box-sizing: border-box;
-} 
-
-/*
-*{
-  margin:  0.5px;
-  padding: 0.5px;
-  box-sizing: border-box;
-} 
-*/
-
-
-
-@media screen and (max-width: 700px){
-
-  .grid-container{
-    display: flex;
-    flex-direction: column;
-    /* align-items: center; */
-    justify-content: space-between;
-    flex-wrap: wrap;
-    height:auto;
-  }
-  .grid-child-calories,
-  .grid-child-grams {
-      height:auto;
-      flex:1;
-  }
-  .grid-child-calories{
-    order: 1;
-  }
-  
-  .grid-child-grams{
-    order: 2;
-  }
-  .total{
-    order:3;
-  }
-  .addBtn{
-    margin:auto;
-    width: auto;
-  }
-  .addCont{
-    margin:auto;
-    width: auto;
-    display: flex;
-    /* justify-content: center; */
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-content: center;
-  }
-  #select-source{
-    margin: auto;
-  }
-  .resource-sup-div{
-    margin: auto;
-    width: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-  }
-  .resources-dropdown{
-    margin: auto;
-    width: auto;
-    display: flex;
-    /* justify-content: center; */
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  
 }
 
+/* ========================================================
+   HEADER & STUDIO LINK STYLES
+   ======================================================== */
 header {
   background: #00a89d;
   color: white;
-  padding: 0.5rem;
+  padding: 1rem 0.5rem;
   text-align: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.30);
   width: 100%;
 }
 
-body{
+header h1 {
+  margin-bottom: 8px;
+}
+
+.studio-nav-wrapper {
+  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.studio-nav-btn {
+  display: inline-block;
+  background-color: #0f172a;
+  color: #ffffff !important;
+  font-family: "Roboto", sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.studio-nav-btn:hover {
+  background-color: #1e293b;
+  border-color: #ffffff;
+  color: #93c5fd !important;
+  transform: translateY(-1px);
+}
+
+/* ========================================================
+   BODY & MAIN LAYOUT
+   ======================================================== */
+body {
   font-family: "Lato", sans-serif;
   font-weight: 400;
   font-size: 16px;
@@ -94,50 +61,35 @@ body{
   padding: 3px;
 }
 
-.input-calories{
+.input-calories {
   font-size: 20px;
   font-weight: bold;
 }
 
-.grid-container{
+.grid-container {
   width: 80%;
   display: flex;
   flex-direction: row;
-  /* align-items: center; */
   justify-content: space-evenly;
   flex-wrap: wrap;
-  height:auto;
-
+  height: auto;
 }
 
-.grid-child-calories{
-  /*width: 50%;*/
-
-  /* top: 15%;
-  left:15%; */
-  margin:5px;
+.grid-child-calories {
+  margin: 5px;
   border: tomato dashed 3px; 
   border-radius: 8px;
   padding: 4px;
-  /*float: left;*/
 }
 
-.grid-child-grams{
-  
-/*  width: 50%;*/
-
-  /* top: 55%;
-  left: 55%; */
-  margin:5px;
+.grid-child-grams {
+  margin: 5px;
   border: tomato dashed 3px;
   border-radius: 8px;
   padding: 4px;
-
-/*  float: left;*/
 }
 
-/*#CalculateButton: hover,*/
-.Button{
+.Button {
   font-weight: bold;
   font-size: 15px;
   background: #00a89d;
@@ -148,70 +100,72 @@ body{
 }
 
 .Button:hover, 
-.Button:active{
-  color:#00a89d;
+.Button:active {
+  color: #00a89d;
   background-color: white;
 }
 
+.resources-dropdown {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
 
-.resources-dropdown{
-  display: flex;
-  /* justify-content: center; */
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-.div-select-resource{
+.div-select-resource {
   margin: auto;
   display: flex;
-  /* justify-content: center; */
   flex-direction: row;
   align-items: center;
   justify-content: center;
   align-content: center;
 }
-.addCont{
+
+.addCont {
   margin: auto;
   display: flex;
-  /* justify-content: center; */
   flex-direction: column;
   align-items: center;
   justify-content: center;
   align-content: center;
 }
-.calorie-results-field{
+
+.calorie-results-field {
   align-items: center;
 }
-.resources{
+
+.resources {
   display: flex;
-  /* justify-content: center; */
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.total{
+
+.total {
   justify-content: center;
 }
-#select-source{
+
+#select-source {
   margin: auto;
 }
-input{
+
+input {
   border: black 1px solid;
-  border-radius: 4px
+  border-radius: 4px;
 }
 
-.main-footer{
+.main-footer {
   background-color: black;
   display: flex;
   margin-top: auto;
   flex: 0;
 }
 
-.main-footer-a{
+.main-footer-a {
   color: white;
 }
 
-.resource-sup-div{
+.resource-sup-div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -220,38 +174,101 @@ input{
   width: 40rem;
 }
 
-.resource-chk{
+.resource-chk {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   margin: 0 4px;
 }
-.res-para{
+
+.res-para {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  margin:0 4px ;
+  margin: 0 4px;
 }
-.div-resource{
+
+.div-resource {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
-.resource-div-content{
+
+.resource-div-content {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
 }
 
-.resource-para-name{
+.resource-para-name {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  padding:0px 2px;
-  margin:auto; 
+  padding: 0px 2px;
+  margin: auto; 
+}
+
+/* ========================================================
+   RESPONSIVE MEDIA QUERIES
+   ======================================================== */
+@media screen and (max-width: 700px) {
+  .grid-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    height: auto;
+  }
+  .grid-child-calories,
+  .grid-child-grams {
+    height: auto;
+    flex: 1;
+  }
+  .grid-child-calories {
+    order: 1;
+  }
+  .grid-child-grams {
+    order: 2;
+  }
+  .total {
+    order: 3;
+  }
+  .addBtn {
+    margin: auto;
+    width: auto;
+  }
+  .addCont {
+    margin: auto;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: center;
+  }
+  #select-source {
+    margin: auto;
+  }
+  .resource-sup-div {
+    margin: auto;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+  }
+  .resources-dropdown {
+    margin: auto;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
 }
