@@ -6,22 +6,32 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet"/>
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <meta name="description" content="Web site created using create-react-app" />
     <link rel="stylesheet" href="../src/Script.css">
     <link rel="shortcut icon" type="image/png" href="favicon.ico">
     <title>Diet Calculation App</title>
   </head>
   <body>
-    <header align="center" style="margin-bottom: 20px;">
-      <h1>Diet Calculator</h1>
-      <nav style="margin-top: 10px;">
-        <a href="../src/builder.html" style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 700; color: #007bff; text-decoration: none;">
-          Go to Notes Builder Studio &rarr;
-        </a>
-      </nav>
+    <!-- HEADER WITH CLICKABLE LINK TO LOCAL BUILDER.HTML -->
+    <header style="text-align: center; margin: 20px 0 30px 0;">
+      <h1 style="margin-bottom: 12px;">Diet Calculator</h1>
+      
+      <!-- Clickable Button Link to src/builder.html -->
+      <a href="../src/builder.html" 
+         target="_self"
+         style="display: inline-block; 
+                background-color: #2563eb; 
+                color: #ffffff; 
+                padding: 10px 20px; 
+                border-radius: 6px; 
+                font-family: 'Roboto', sans-serif; 
+                font-size: 14px; 
+                font-weight: 700; 
+                text-decoration: none; 
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+                transition: background 0.2s ease;">
+        ⚡ Open Polity Notes Builder Studio &rarr;
+      </a>
     </header>
 
     <script type="text/javascript" src="../src/bmr.js"></script>
@@ -106,13 +116,5 @@
         <p id="total-resources"></p>
       </div>
     </div>
-
-    <!-- 
-    <footer class="main-footer">
-      <nav>
-        <a href="https://www.github.com/sasiking" class="main-footer-a">Created by SasiKing</a>
-      </nav>
-    </footer>
-    -->
   </body>
 </html>
