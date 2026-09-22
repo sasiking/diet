@@ -3,113 +3,227 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet"/>
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Diet calculation and macro tracker application" />
-    <link rel="stylesheet" href="../src/Script.css">
-    <link rel="shortcut icon" type="image/png" href="favicon.ico">
-    <title>Diet Calculation App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    <meta name="theme-color" content="#00a89d" />
+    <meta name="description" content="Dynamic Diet Calculator & Macro Nutrients Planner" />
+    <link rel="stylesheet" href="../src/Script.css" />
+    <link rel="shortcut icon" type="image/png" href="favicon.ico" />
+    <title>Diet & Macro Nutrients Studio</title>
   </head>
   <body>
-    <!-- APPLICATION HEADER WITH INTEGRATED BUILDER NAVIGATION -->
-    <header>
-      <h1>Diet Calculator</h1>
-      <div class="studio-nav-wrapper">
-        <a href="../src/builder.html" class="studio-nav-btn" target="_self">
-          ⚡ Open Polity Notes Builder Studio &rarr;
-        </a>
+    <!-- MODERN APP NAVBAR -->
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="brand-zone">
+          <div class="brand-icon">🥗</div>
+          <div>
+            <h1>Diet Calculator</h1>
+            <p class="brand-subtitle">Precision Macronutrient & Nutrition Planner</p>
+          </div>
+        </div>
+        
+        <div class="studio-nav-wrapper">
+          <a href="../src/builder.html" class="studio-nav-btn" target="_self">
+            ⚡ Polity Notes Studio &rarr;
+          </a>
+        </div>
       </div>
     </header>
 
-    <!-- SCRIPTS -->
-    <script type="text/javascript" src="../src/bmr.js"></script>
-    <script type="text/javascript" src="../src/resources.js"></script>
+    <main class="main-layout">
+      <!-- CALCULATOR MAIN CARD -->
+      <section class="calculator-card">
+        <form id="dietForm">
+          <div class="calculator-grid">
+            
+            <!-- COLUMN 1: TARGETS & PERCENTAGES -->
+            <div class="calc-panel input-panel">
+              <h2 class="panel-title">1. Daily Targets & Ratios</h2>
+              
+              <div class="input-group main-target">
+                <label for="targetCalories">Total Daily Calorie Target (kcal)</label>
+                <div class="input-with-affix">
+                  <input id="targetCalories" name="CalorieIntake" type="number" value="1500" class="styled-input calorie-primary" />
+                  <span class="input-affix">kcal</span>
+                </div>
+              </div>
 
-    <!-- MAIN CALCULATOR INTERFACE -->
-    <div id="container" align="center">
-      <form>
-        <div class="wrapper-calories">
-          <!-- COLUMN 1: INPUT TARGETS & MACRO RATIOS -->
-          <div id="column-one">
-            <p class="input-calories"> Enter total daily calorie intake
-              <input id="targetCalories" name="CalorieIntake" type="text" size="7" value="1500" class="calorie-field-style">
-            </p>
-            <h3 id="calculator-h3">Enter desired macronutrient percentages %</h3>
-            <p>
-              Carbohydrate
-              <input type="text" id="carb-per" name="carb-per" value="30" size="4">
-            </p>
-            <p>
-              Protein
-              <input type="text" id="protien-per" name="protien-per" value="35" size="4">
-            </p>
-            <p>
-              Fat
-              <input type="text" id="fat-per" name="fat-per" value="35" size="4">                    
-            </p>
-            <div class="inner">
-              <input type="button" value="Calculate" class="Button" onclick="calc(this.form)">
-              <input type="reset" value="Reset" name="Reset" class="Button">
+              <div class="macro-ratios-box">
+                <div class="macro-ratios-header">
+                  <h3>Macronutrient Split (%)</h3>
+                  <span id="ratioTracker" class="ratio-badge valid">Total: 100%</span>
+                </div>
+
+                <!-- LIVE PROGRESS RATIO BAR -->
+                <div class="macro-ratio-bar">
+                  <div id="barCarb" class="bar-segment carb" style="width: 30%;"></div>
+                  <div id="barProtein" class="bar-segment protein" style="width: 35%;"></div>
+                  <div id="barFat" class="bar-segment fat" style="width: 35%;"></div>
+                </div>
+
+                <div class="ratio-inputs-grid">
+                  <div class="ratio-field carb-field">
+                    <label for="carb-per">Carbohydrates</label>
+                    <div class="input-with-affix">
+                      <input type="number" id="carb-per" name="carb-per" value="30" class="styled-input macro-input" oninput="updateLiveRatios()" />
+                      <span class="input-affix">%</span>
+                    </div>
+                  </div>
+
+                  <div class="ratio-field protein-field">
+                    <label for="protien-per">Protein</label>
+                    <div class="input-with-affix">
+                      <input type="number" id="protien-per" name="protien-per" value="35" class="styled-input macro-input" oninput="updateLiveRatios()" />
+                      <span class="input-affix">%</span>
+                    </div>
+                  </div>
+
+                  <div class="ratio-field fat-field">
+                    <label for="fat-per">Fats</label>
+                    <div class="input-with-affix">
+                      <input type="number" id="fat-per" name="fat-per" value="35" class="styled-input macro-input" oninput="updateLiveRatios()" />
+                      <span class="input-affix">%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <p id="ratioAlert" class="helper-text">Ratios currently equal 100%.</p>
+              </div>
+
+              <div class="action-btn-row">
+                <button type="button" class="btn btn-primary" onclick="calc(this.form)">Calculate Split</button>
+                <button type="reset" class="btn btn-secondary" onclick="setTimeout(updateLiveRatios, 50)">Reset Defaults</button>
+              </div>
             </div>
-            <p>Note: Please make sure that all the percentages add upto 100</p>
+
+            <!-- COLUMN 2: CALCULATED BREAKDOWNS -->
+            <div class="calc-panel results-panel">
+              <h2 class="panel-title">2. Calculated Macronutrient Breakdown</h2>
+              
+              <div class="results-cards-grid">
+                <!-- CARB RESULTS CARD -->
+                <div class="macro-result-card carb-card">
+                  <div class="card-icon">🍞</div>
+                  <div class="card-meta">
+                    <h4>Carbohydrates</h4>
+                    <div class="stat-row">
+                      <span class="stat-label">Calories:</span>
+                      <input name="CarbCalories" type="text" readonly class="stat-field" placeholder="—" />
+                    </div>
+                    <div class="stat-row">
+                      <span class="stat-label">Grams:</span>
+                      <input name="CarbGrams" type="text" readonly class="stat-field" placeholder="—" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PROTEIN RESULTS CARD -->
+                <div class="macro-result-card protein-card">
+                  <div class="card-icon">🥩</div>
+                  <div class="card-meta">
+                    <h4>Protein</h4>
+                    <div class="stat-row">
+                      <span class="stat-label">Calories:</span>
+                      <input name="ProteinCalories" type="text" readonly class="stat-field" placeholder="—" />
+                    </div>
+                    <div class="stat-row">
+                      <span class="stat-label">Grams:</span>
+                      <input name="ProteinGrams" type="text" readonly class="stat-field" placeholder="—" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- FAT RESULTS CARD -->
+                <div class="macro-result-card fat-card">
+                  <div class="card-icon">🥑</div>
+                  <div class="card-meta">
+                    <h4>Fats</h4>
+                    <div class="stat-row">
+                      <span class="stat-label">Calories:</span>
+                      <input name="FatCalories" type="text" readonly class="stat-field" placeholder="—" />
+                    </div>
+                    <div class="stat-row">
+                      <span class="stat-label">Grams:</span>
+                      <input name="FatGrams" type="text" readonly class="stat-field" placeholder="—" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </section>
+
+      <!-- FOOD SOURCES & INVENTORY TRACKER -->
+      <section class="sources-card">
+        <div class="sources-header">
+          <div>
+            <h2 class="panel-title" style="margin-bottom: 2px;">3. Custom Dietary Sources</h2>
+            <p class="helper-text" style="margin: 0;">Add food groups to plan your meal composition</p>
           </div>
 
-          <!-- COLUMN 2: CALCULATED SPLITS (CALORIES & GRAMS) -->
-          <div id="column-two" class="grid-container">
-            <div class="grid-child-calories">
-              <h3 id="calculator-h3">Calories from each macro</h3>
-              <p>
-                Carbs
-                <input name="CarbCalories" type="text" size="7" class="calorie-results-field" placeholder="Carb calories"> 
-              </p>
-              <p>
-                Protein
-                <input name="ProteinCalories" type="text" size="7" class="calorie-results-field" placeholder="Protein calories"> 
-              </p>
-              <p>
-                Fat
-                <input name="FatCalories" type="text" size="7" class="calorie-results-field" placeholder="Fat calories"> 
-              </p>
-            </div>
-            <div class="grid-child-grams">
-              <h3 id="calculator-h3">Grams of each macro</h3>
-              <p>
-                Carbs (g)
-                <input name="CarbGrams" type="text" size="7" class="grams-results-field" placeholder="Carb grams">
-              </p>
-              <p>
-                Protein (g)
-                <input name="ProteinGrams" type="text" size="7" class="grams-results-field" placeholder="Protein grams">
-              </p>
-              <p>
-                Fat (g)
-                <input name="FatGrams" type="text" size="7" class="grams-results-field" placeholder="Fat grams">
-              </p>
-            </div>
+          <div class="sources-controls">
+            <select name="slec" id="select-source" class="styled-select">
+              <option value="Dairy" selected>🥛 Dairy</option>
+              <option value="Veg">🥦 Vegetables</option>
+              <option value="Non-Veg">🍗 Poultry & Meat</option>
+              <option value="Seeds">🌻 Seeds</option>
+              <option value="Nuts">🥜 Nuts</option>
+              <option value="Millets">🌾 Millets & Grains</option>
+            </select>
+            <button type="button" id="btnAdd" class="btn btn-add" onclick="AddDropDownList()">+ Add Group</button>
+            <button type="button" class="btn btn-remove" onclick="btnRemove()">✕ Remove</button>
           </div>
         </div>
-      </form>
-    </div>
-    
-    <!-- FOOD SOURCE SELECTION & AGGREGATION ZONE -->
-    <div class="resources">
-      <div class="resources-dropdown">
-        <select name="slec" id="select-source" class="resource-select">
-          <option value="Dairy" selected>Dairy</option>
-          <option value="Veg">Veg</option>
-          <option value="Non-Veg">Non-Veg</option>
-          <option value="Seeds">Seeds</option>
-          <option value="Nuts">Nuts</option>
-          <option value="Millets">Millets</option>
-        </select>
-        <input type="button" id="btnAdd" class="Button addBtn" onclick="AddDropDownList()" value="Add Diet Sources" />
-        <input type="button" class="Button Remove" onclick="btnRemove()" value="Remove">
-      </div>
-      <div id="dvContainer" class="addCont"></div>
-      <div class="total">
-        <p id="total-resources"></p>
-      </div>
-    </div>
+
+        <div id="dvContainer" class="sources-container"></div>
+        <div class="total-bar">
+          <p id="total-resources"></p>
+        </div>
+      </section>
+    </main>
+
+    <!-- LIVE DYNAMIC SCRIPT -->
+    <script>
+      function updateLiveRatios() {
+        const c = parseFloat(document.getElementById('carb-per').value) || 0;
+        const p = parseFloat(document.getElementById('protien-per').value) || 0;
+        const f = parseFloat(document.getElementById('fat-per').value) || 0;
+        const total = c + p + f;
+
+        const badge = document.getElementById('ratioTracker');
+        const alertText = document.getElementById('ratioAlert');
+        const barC = document.getElementById('barCarb');
+        const barP = document.getElementById('barProtein');
+        const barF = document.getElementById('barFat');
+
+        badge.textContent = `Total: ${total}%`;
+
+        // Update progress bar widths proportional to entry
+        const scale = total > 0 ? 100 / total : 1;
+        barC.style.width = (c * scale) + '%';
+        barP.style.width = (p * scale) + '%';
+        barF.style.width = (f * scale) + '%';
+
+        if (total === 100) {
+          badge.className = 'ratio-badge valid';
+          alertText.textContent = '✓ Split equals exactly 100%. Ready to calculate!';
+          alertText.style.color = '#15803d';
+        } else if (total > 100) {
+          badge.className = 'ratio-badge invalid';
+          alertText.textContent = `⚠ Exceeds 100% by ${(total - 100).toFixed(0)}%. Please reduce ratios.`;
+          alertText.style.color = '#b91c1c';
+        } else {
+          badge.className = 'ratio-badge warning';
+          alertText.textContent = `ℹ Needs ${(100 - total).toFixed(0)}% more to complete the 100% target.`;
+          alertText.style.color = '#b45309';
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', updateLiveRatios);
+    </script>
+    <script type="text/javascript" src="../src/bmr.js"></script>
+    <script type="text/javascript" src="../src/resources.js"></script>
   </body>
 </html>

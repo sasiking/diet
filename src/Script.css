@@ -1,274 +1,488 @@
+/* ========================================================
+   MODERN DESIGN SYSTEM & RESETS
+   ======================================================== */
+:root {
+  --primary: #00a89d;
+  --primary-hover: #008f85;
+  --primary-light: #e6f7f6;
+  --dark-bg: #0f172a;
+  --card-bg: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  
+  --carb-color: #3b82f6;
+  --carb-bg: #eff6ff;
+  --protein-color: #10b981;
+  --protein-bg: #ecfdf5;
+  --fat-color: #f59e0b;
+  --fat-bg: #fffbeb;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+}
+
 * {
-  margin: 0px;
-  padding: 0.80px;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #f1f5f9;
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
 /* ========================================================
-   HEADER & STUDIO LINK STYLES
+   TOP APPLICATION HEADER
    ======================================================== */
-header {
-  background: #00a89d;
+.app-header {
+  background: linear-gradient(135deg, #008f85 0%, #00a89d 100%);
   color: white;
-  padding: 1rem 0.5rem;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.30);
-  width: 100%;
+  padding: 1.25rem 2rem;
+  box-shadow: 0 4px 20px rgba(0, 168, 157, 0.25);
 }
 
-header h1 {
-  margin-bottom: 8px;
-}
-
-.studio-nav-wrapper {
-  margin-top: 6px;
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.brand-zone {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  font-size: 2.2rem;
+  background: rgba(255, 255, 255, 0.2);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+}
+
+.brand-zone h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+
+.brand-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
 }
 
 .studio-nav-btn {
-  display: inline-block;
-  background-color: #0f172a;
+  display: inline-flex;
+  align-items: center;
+  background: var(--dark-bg);
   color: #ffffff !important;
-  font-family: "Roboto", sans-serif;
   font-size: 13.5px;
   font-weight: 700;
   text-decoration: none;
-  padding: 6px 14px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
+  padding: 9px 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .studio-nav-btn:hover {
-  background-color: #1e293b;
-  border-color: #ffffff;
+  background: #1e293b;
+  transform: translateY(-2px);
   color: #93c5fd !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.35);
+}
+
+/* ========================================================
+   MAIN CONTENT LAYOUT
+   ======================================================== */
+.main-layout {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.calculator-card, .sources-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+.panel-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 20px;
+  letter-spacing: -0.3px;
+}
+
+.helper-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* ========================================================
+   CALCULATOR TWO-COLUMN GRID
+   ======================================================== */
+.calculator-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 35px;
+}
+
+.calc-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+/* INPUT CONTROLS */
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.input-with-affix {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.styled-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--text-main);
+  background: #f8fafc;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.styled-input:focus {
+  background: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 168, 157, 0.15);
+}
+
+.input-affix {
+  position: absolute;
+  right: 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* MACRO SPLIT COMPONENT */
+.macro-ratios-box {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  padding: 18px;
+  border-radius: 12px;
+  margin-bottom: 22px;
+}
+
+.macro-ratios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.macro-ratios-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.ratio-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.ratio-badge.valid { background: #dcfce7; color: #15803d; }
+.ratio-badge.invalid { background: #fee2e2; color: #b91c1c; }
+.ratio-badge.warning { background: #fef3c7; color: #b45309; }
+
+/* RATIO COLOR BAR */
+.macro-ratio-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  background: #e2e8f0;
+}
+
+.bar-segment {
+  height: 100%;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bar-segment.carb { background: var(--carb-color); }
+.bar-segment.protein { background: var(--protein-color); }
+.bar-segment.fat { background: var(--fat-color); }
+
+.ratio-inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.ratio-field label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* BUTTONS */
+.action-btn-row {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.btn {
+  padding: 11px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  flex: 2;
+  box-shadow: 0 4px 12px rgba(0, 168, 157, 0.2);
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
   transform: translateY(-1px);
 }
 
+.btn-secondary {
+  background: #e2e8f0;
+  color: var(--text-main);
+  flex: 1;
+}
+
+.btn-secondary:hover {
+  background: #cbd5e1;
+}
+
 /* ========================================================
-   BODY & MAIN LAYOUT
+   RESULTS CARDS
    ======================================================== */
-body {
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.7;
-  padding: 3px;
-}
-
-.input-calories {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.grid-container {
-  width: 80%;
+.results-cards-grid {
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.macro-result-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  transition: transform 0.2s ease;
+}
+
+.macro-result-card:hover {
+  transform: translateY(-2px);
+}
+
+.carb-card {
+  background: var(--carb-bg);
+  border-color: #bfdbfe;
+}
+.protein-card {
+  background: var(--protein-bg);
+  border-color: #a7f3d0;
+}
+.fat-card {
+  background: var(--fat-bg);
+  border-color: #fde68a;
+}
+
+.card-icon {
+  font-size: 1.8rem;
+  background: #ffffff;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-meta {
+  flex-grow: 1;
+}
+
+.card-meta h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text-main);
+}
+
+.stat-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 20px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.stat-field {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main);
+  width: 90px;
+  outline: none;
+}
+
+/* ========================================================
+   CUSTOM DIETARY SOURCES SECTION
+   ======================================================== */
+.sources-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
-  height: auto;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.grid-child-calories {
-  margin: 5px;
-  border: tomato dashed 3px; 
+.sources-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.styled-select {
+  padding: 9px 14px;
   border-radius: 8px;
-  padding: 4px;
+  border: 1.5px solid var(--border-color);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: #ffffff;
+  color: var(--text-main);
+  outline: none;
 }
 
-.grid-child-grams {
-  margin: 5px;
-  border: tomato dashed 3px;
-  border-radius: 8px;
-  padding: 4px;
-}
-
-.Button {
-  font-weight: bold;
-  font-size: 15px;
-  background: #00a89d;
-  border: 1px #00a89d solid;
-  border-radius: 8px;
-  padding: 4px;
-  cursor: pointer;
-}
-
-.Button:hover, 
-.Button:active {
-  color: #00a89d;
-  background-color: white;
-}
-
-.resources-dropdown {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-
-.div-select-resource {
-  margin: auto;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
-}
-
-.addCont {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
-}
-
-.calorie-results-field {
-  align-items: center;
-}
-
-.resources {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.total {
-  justify-content: center;
-}
-
-#select-source {
-  margin: auto;
-}
-
-input {
-  border: black 1px solid;
-  border-radius: 4px;
-}
-
-.main-footer {
-  background-color: black;
-  display: flex;
-  margin-top: auto;
-  flex: 0;
-}
-
-.main-footer-a {
+.btn-add {
+  background: #0284c7;
   color: white;
 }
+.btn-add:hover { background: #0369a1; }
 
+.btn-remove {
+  background: #f1f5f9;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+}
+.btn-remove:hover { background: #fee2e2; }
+
+.sources-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 48px;
+  align-items: center;
+}
+
+.total-bar {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border-color);
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 0.95rem;
+}
+
+/* Preserving JavaScript output elements from bmr.js/resources.js */
 .resource-sup-div {
-  display: flex;
-  justify-content: center;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 14px;
+  box-shadow: var(--shadow-sm);
+  display: inline-flex;
   align-items: center;
-  flex-direction: row;
-  padding: 8px;
-  width: 40rem;
-}
-
-.resource-chk {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  margin: 0 4px;
-}
-
-.res-para {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  margin: 0 4px;
-}
-
-.div-resource {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.resource-div-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-}
-
-.resource-para-name {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  padding: 0px 2px;
-  margin: auto; 
+  gap: 8px;
 }
 
 /* ========================================================
-   RESPONSIVE MEDIA QUERIES
+   RESPONSIVENESS
    ======================================================== */
-@media screen and (max-width: 700px) {
-  .grid-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    height: auto;
+@media screen and (max-width: 860px) {
+  .calculator-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
   }
-  .grid-child-calories,
-  .grid-child-grams {
-    height: auto;
-    flex: 1;
-  }
-  .grid-child-calories {
-    order: 1;
-  }
-  .grid-child-grams {
-    order: 2;
-  }
-  .total {
-    order: 3;
-  }
-  .addBtn {
-    margin: auto;
-    width: auto;
-  }
-  .addCont {
-    margin: auto;
-    width: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-content: center;
-  }
-  #select-source {
-    margin: auto;
-  }
-  .resource-sup-div {
-    margin: auto;
-    width: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-  }
-  .resources-dropdown {
-    margin: auto;
-    width: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+  .app-header {
+    padding: 1.25rem 1.25rem;
   }
 }
