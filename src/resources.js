@@ -1,65 +1,154 @@
-const category_dairy = [
-    {Name:"cheese", Quantity:1, cal:61, c:0, p:4, f:5},
-    {Name:"Paneer", Quantity:100, cal:310, c:1, p:18, f:26},
-    {Name:"ghee", Quantity:10, cal:90, c:0, p:0, f:10},
-    {Name:"curd", Quantity:100, cal:66, c:3, p:4, f:4},
-    {Name:"Cream-MF", Quantity:10, cal:38, c:0.3, p:0.2, f:4},
-    {Name:"WHEY", Quantity:1, cal:113, c:1, p:25, f:1}
-];
-const category_veg = [
-    {Name:"rajma", Quantity:100, cal:333, c:60, p:24, f:1},
-    {Name:"oats", Quantity:100, cal:402, c:69.4, p:11.8, f:8.6},
-    {Name:"S.CHUNKS", Quantity:100, cal:336, c:34, p:50, f:0},
-    {Name:"ChickPeas", Quantity:10, cal:36.4, c:6.1, p:1.9, f:0.6},
-    {Name:"Avocado", Quantity:200, cal:320, c:2, p:4, f:30},
-    {Name:"Chana Dal", Quantity:100, cal:347, c:52, p:22, f:2},
-    {Name:"Tur daal", Quantity:100, cal:343, c:63, p:22, f:1.5},
-    {Name:"Yellow moong", Quantity:100, cal:31, c:1, p:13, f:0},
-    {Name:"Black chana", Quantity:100, cal:53, c:0, p:20.5, f:6}
-];
+// Comprehensive food database with standard nutritional metrics per 100g
+const FOOD_DATABASE = {
+  Dairy: [
+    { id: 'milk', name: 'Whole Milk', cal: 60, p: 3.2, c: 4.8, f: 3.3 },
+    { id: 'paneer', name: 'Paneer (Cottage Cheese)', cal: 265, p: 18.3, c: 1.2, f: 20.8 },
+    { id: 'curd', name: 'Greek Yogurt / Curd', cal: 98, p: 10.0, c: 3.6, f: 5.0 },
+    { id: 'cheese', name: 'Cheddar Cheese', cal: 402, p: 25.0, c: 1.3, f: 33.0 }
+  ],
+  Veg: [
+    { id: 'spinach', name: 'Spinach', cal: 23, p: 2.9, c: 3.6, f: 0.4 },
+    { id: 'broccoli', name: 'Broccoli', cal: 34, p: 2.8, c: 6.6, f: 0.4 },
+    { id: 'potato', name: 'Boiled Potato', cal: 87, p: 1.9, c: 20.1, f: 0.1 },
+    { id: 'beans', name: 'Green Beans', cal: 31, p: 1.8, c: 7.0, f: 0.2 }
+  ],
+  'Non-Veg': [
+    { id: 'chicken_breast', name: 'Chicken Breast', cal: 165, p: 31.0, c: 0.0, f: 3.6 },
+    { id: 'eggs', name: 'Whole Egg (2 large ~100g)', cal: 143, p: 12.6, c: 0.7, f: 9.5 },
+    { id: 'fish', name: 'Salmon / White Fish', cal: 206, p: 22.0, c: 0.0, f: 12.0 }
+  ],
+  Seeds: [
+    { id: 'chia', name: 'Chia Seeds', cal: 486, p: 16.5, c: 42.1, f: 30.7 },
+    { id: 'flax', name: 'Flax Seeds', cal: 534, p: 18.3, c: 28.9, f: 42.2 },
+    { id: 'pumpkin_seeds', name: 'Pumpkin Seeds', cal: 559, p: 30.2, c: 10.7, f: 49.1 }
+  ],
+  Nuts: [
+    { id: 'almonds', name: 'Almonds', cal: 579, p: 21.2, c: 21.6, f: 49.9 },
+    { id: 'walnuts', name: 'Walnuts', cal: 654, p: 15.2, c: 13.7, f: 65.2 },
+    { id: 'peanuts', name: 'Peanuts', cal: 567, p: 25.8, c: 16.1, f: 49.2 }
+  ],
+  Millets: [
+    { id: 'ragi', name: 'Finger Millet (Ragi)', cal: 328, p: 7.3, c: 72.0, f: 1.3 },
+    { id: 'oats', name: 'Rolled Oats', cal: 389, p: 16.9, c: 66.3, f: 6.9 },
+    { id: 'quinoa', name: 'Cooked Quinoa', cal: 120, p: 4.4, c: 21.3, f: 1.9 }
+  ]
+};
 
-const category_non_veg = [
-    {Name:"eggs", Quantity:1, cal:71.4, c:60, p:6, f:5},
-    {Name:"egg whites", Quantity:1, cal:14.4, c:69.4, p:3.6, f:0},
-    {Name:"Salmon", Quantity:100, cal:170, c:34, p:26, f:6},
-    {Name:"chicken", Quantity:100, cal:239, c:6.1, p:27, f:9},
-    {Name:"Chicken T", Quantity:100, cal:177, c:2, p:24, f:8},
-    {Name:"Chicken B", Quantity:100, cal:165, c:52, p:31, f:3.6},
-    {Name:"Liver mutton", Quantity:100, cal:138, c:63, p:20.4, f:5},
-    {Name:"heart", Quantity:100, cal:120, c:1, p:16.5, f:5.7},
-    {Name:"Kidneys", Quantity:100, cal:95, c:0, p:15.7, f:2.9},
-    {Name:"Brain", Quantity:100, cal:120, c:1, p:10.4, f:8.6},
-    {Name:"paya", Quantity:1, cal:193, c:0, p:19, f:9.8}
-];
+// Track currently active selected items in session
+let activeFoodLog = [];
 
-const category_nuts = [
-    {Name:"Macademia", Quantity:10, cal:70,c:1.4,p:1,f:6.7},
-    {Name:"Brazil", Quantity:10, cal:68,c:0,p:1.4,f:7.2},   
-    {Name:"Pine", Quantity:10, cal:67.3,c:1.3,p:1.4,f:6.8}, 
-    {Name:"pecan", Quantity:10, cal:72,c:1,p:1,f:6.3},      
-    {Name:"hazlenuts", Quantity:10, cal:67,c:1,p:1.4,f:5},  
-    {Name:"almonds", Quantity:10, cal:61,c:2,p:2,f:6.3},    
-    {Name:"Walnuts", Quantity:10, cal:68,c:1.2,p:1.4,f:4.4},
-    {Name:"Pista", Quantity:10, cal:56.2,c:2.8,p:2,f:4.5},
-    {Name:"Cashew", Quantity:10, cal:55.3,c:3,p:1.8,f:5.3}
-];
+function AddDropDownList() {
+  const categorySelect = document.getElementById('select-source');
+  const selectedCat = categorySelect ? categorySelect.value : 'Dairy';
+  const availableItems = FOOD_DATABASE[selectedCat] || [];
 
-const category_seeds = [
-    {Name:"Sunflower", Quantity:10, cal:63,c:1,p:2,f:2.4},
-    {Name:"Pumpkin", Quantity:10, cal:35,c:1,p:2.5,f:4},      
-    {Name:"flax", Quantity:10, cal:45,c:0,p:2,f:3},
-    {Name:"chia", Quantity:10, cal:48,c:1,p:1.7,f:4.7},       
-    {Name:"watermelon", Quantity:10, cal:55,c:1.5,p:2.8,f:10},
-    {Name:"Sabja", Quantity:10, cal:52,c:3,p:11,f:0}
-];
+  // Pick first item in category not yet present, or fallback to first item
+  const itemToAdd = availableItems.find(item => !activeFoodLog.some(log => log.id === item.id)) || availableItems[0];
+  if (!itemToAdd) return;
 
-const category_millets = [
-    {Name:"Rice", Quantity:100, cal:360,c:78,p:6.5,f:0.5},
-    {Name:"Wheat", Quantity:100, cal:362,c:59,p:11.8,f:1.7},
-    {Name:"Ragi", Quantity:100, cal:328,c:61.5,p:7.3,f:1.3},
-    {Name:"Quinoa", Quantity:100, cal:368,c:57,p:14,f:6.1},
-    {Name:"oats", Quantity:100, cal:402,c:58.8,p:11.8,f:8.6},        
-    {Name:"Foxtail(Korra)", Quantity:100, cal:351,c:56.5,p:11.2,f:4},
-    {Name:"BrownTop(Andu)", Quantity:100, cal:340,c:62,p:8,f:2},      
-    {Name:"Kodo(Arikelu)", Quantity:100, cal:378,c:64,p:11,f:4.2}
-];
+  activeFoodLog.push({
+    ...itemToAdd,
+    instanceId: Date.now() + Math.random(),
+    grams: 100 // default portion
+  });
+
+  renderFoodLog();
+}
+
+function removeFoodItem(instanceId) {
+  activeFoodLog = activeFoodLog.filter(item => item.instanceId !== instanceId);
+  renderFoodLog();
+}
+
+function updateFoodGrams(instanceId, grams) {
+  const target = activeFoodLog.find(item => item.instanceId === instanceId);
+  if (target) {
+    target.grams = Math.max(0, parseFloat(grams) || 0);
+    renderTotalsOnly();
+  }
+}
+
+function btnRemove() {
+  activeFoodLog.pop();
+  renderFoodLog();
+}
+
+function renderFoodLog() {
+  const container = document.getElementById('dvContainer');
+  if (!container) return;
+
+  if (activeFoodLog.length === 0) {
+    container.innerHTML = `
+      <div style="width:100%; text-align:center; color:#94a3b8; padding:24px; font-size:14px; border:1.5px dashed #cbd5e1; border-radius:10px; background:#f8fafc;">
+        No dietary sources added yet. Pick a food group from the dropdown and click <strong>+ Add Group</strong>.
+      </div>
+    `;
+    renderTotalsOnly();
+    return;
+  }
+
+  container.innerHTML = activeFoodLog.map(item => {
+    const factor = item.grams / 100;
+    const curCal = (item.cal * factor).toFixed(0);
+    const curP = (item.p * factor).toFixed(1);
+    const curC = (item.c * factor).toFixed(1);
+    const curF = (item.f * factor).toFixed(1);
+
+    return `
+      <div class="resource-card" id="food-${item.instanceId}">
+        <div class="resource-card-header">
+          <span class="resource-name">${item.name}</span>
+          <button class="resource-del-btn" onclick="removeFoodItem(${item.instanceId})" title="Remove item">✕</button>
+        </div>
+        <div class="resource-inputs-row">
+          <label>Portion (g):</label>
+          <input type="number" min="10" step="10" value="${item.grams}" class="resource-gram-input"
+                 oninput="updateFoodGrams(${item.instanceId}, this.value)">
+        </div>
+        <div class="resource-stats-badges">
+          <span class="badge-cal">${curCal} kcal</span>
+          <span class="badge-p">P: ${curP}g</span>
+          <span class="badge-c">C: ${curC}g</span>
+          <span class="badge-f">F: ${curF}g</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  renderTotalsOnly();
+}
+
+function renderTotalsOnly() {
+  const totalDiv = document.getElementById('total-resources');
+  if (!totalDiv) return;
+
+  let totCal = 0, totP = 0, totC = 0, totF = 0;
+
+  activeFoodLog.forEach(item => {
+    const factor = item.grams / 100;
+    totCal += item.cal * factor;
+    totP += item.p * factor;
+    totC += item.c * factor;
+    totF += item.f * factor;
+  });
+
+  if (activeFoodLog.length === 0) {
+    totalDiv.innerHTML = '';
+    return;
+  }
+
+  totalDiv.innerHTML = `
+    <div class="resource-total-summary">
+      <span class="total-title">Total Added Sources:</span>
+      <span class="total-chip" style="background:#e0f2fe; color:#0369a1;">🔥 ${totCal.toFixed(0)} kcal</span>
+      <span class="total-chip" style="background:#dcfce7; color:#15803d;">🥩 Protein: ${totP.toFixed(1)}g</span>
+      <span class="total-chip" style="background:#eff6ff; color:#2563eb;">🍞 Carbs: ${totC.toFixed(1)}g</span>
+      <span class="total-chip" style="background:#fef3c7; color:#b45309;">🥑 Fats: ${totF.toFixed(1)}g</span>
+    </div>
+  `;
+}
+
+// Initial hydration on DOM readiness
+window.addEventListener('DOMContentLoaded', () => {
+  renderFoodLog();
+});
