@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Polity Notes Visual Builder Studio (Modular Mains Engine)</title>
+  <title>Notes Visual Builder Studio</title>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Kalam:wght@300;400;700&family=Patrick+Hand&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -24,10 +24,11 @@
       --ink-amber: #b45309;
       --ink-emerald: #047857;
       --ink-violet: #7c2d12;
-      --highlight-yellow: rgba(254, 240, 138, 0.75);
-      --highlight-green: rgba(187, 247, 208, 0.65);
-      --highlight-pink: rgba(251, 207, 232, 0.65);
-      --highlight-blue: rgba(186, 230, 253, 0.65);
+      --highlight-yellow: rgba(254, 240, 138, 0.85);
+      --highlight-green: rgba(187, 247, 208, 0.75);
+      --highlight-pink: rgba(251, 207, 232, 0.75);
+      --highlight-blue: rgba(186, 230, 253, 0.75);
+      --highlight-orange: rgba(254, 215, 170, 0.85);
       --sticky-yellow: #fef9c3;
       --sticky-pink: #ffe4e6;
       --sticky-blue: #e0f2fe;
@@ -68,6 +69,36 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: #93c5fd;
+    }
+
+    /* Active File & Document Title Display */
+    .doc-meta-box {
+      margin-top: 8px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+    .doc-meta-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #94a3b8;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .doc-meta-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #38bdf8;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      outline: none;
+    }
+    .doc-meta-input:focus {
+      color: #ffffff;
     }
 
     .toolbox-items {
@@ -111,6 +142,41 @@
       transform: translateX(3px);
     }
 
+    /* Sidebar Highlighter Bar */
+    .sidebar-highlighter-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #0f172a;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+      margin-bottom: 4px;
+    }
+    .hl-palette-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.25);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      transition: transform 0.15s ease;
+    }
+    .hl-palette-btn:hover {
+      transform: scale(1.15);
+    }
+    .hl-clear-btn {
+      background: #334155;
+      color: #f87171;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid #475569;
+    }
+
     .actions-panel {
       padding: 14px;
       border-top: 1px solid #334155;
@@ -142,6 +208,38 @@
     .btn-clear { background: #dc2626; color: white; }
     .btn-clear:hover { background: #ef4444; }
 
+    /* ================= FLOATING HIGHLIGHTER TOOLBAR ================= */
+    #floatingHighlightToolbar {
+      position: absolute;
+      display: none;
+      background: #0f172a;
+      border: 1px solid #475569;
+      border-radius: 8px;
+      padding: 5px 8px;
+      gap: 6px;
+      align-items: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      z-index: 1000;
+      user-select: none;
+    }
+    #floatingHighlightToolbar::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px 6px 0;
+      border-style: solid;
+      border-color: #0f172a transparent transparent transparent;
+    }
+    .floating-hl-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-right: 2px;
+    }
+
     /* ================= DYNAMIC CANVAS ARCHITECTURE ================= */
     .canvas-wrapper {
       flex-grow: 1;
@@ -153,6 +251,7 @@
       justify-content: center;
       align-items: flex-start;
       height: 100vh;
+      position: relative;
     }
 
     .notebook-container {
@@ -303,18 +402,101 @@
     .bullet-list li::before { content: "➔"; position: absolute; left: 0; color: var(--ink-blue); font-weight: bold; }
 
     .sub-point { margin-left: 18px; padding-left: 10px; border-left: 2px dashed #94a3b8; font-size: 15px; line-height: 22px; margin-top: 4px; margin-bottom: 8px; min-height: 22px; }
+    
+    /* Regular text block wrapper with hover delete */
+    .regular-text-block {
+      position: relative;
+      margin: 8px 0;
+      padding: 4px 28px 4px 4px;
+      border-radius: 4px;
+      transition: background 0.15s ease;
+    }
+    .regular-text-block:hover {
+      background: rgba(241, 245, 249, 0.6);
+    }
+    .regular-text-content {
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--ink-dark);
+      outline: none;
+      min-height: 24px;
+    }
+    .text-del-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(15, 23, 42, 0.7);
+      color: #ffffff;
+      border: none;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      user-select: none;
+      z-index: 10;
+    }
+    .regular-text-block:hover .text-del-btn {
+      display: flex;
+    }
+    .text-del-btn:hover {
+      background: #dc2626;
+    }
 
-    /* Sticky Notes */
-    .sticky { padding: 14px 16px; border-radius: 2px; box-shadow: 2px 4px 10px rgba(0,0,0,0.1); transform: rotate(-0.5deg); margin: 12px 0; font-size: 15.5px; line-height: 22px; font-family: 'Patrick Hand', cursive; }
+    /* Sticky Notes & Built-in Delete Controls */
+    .sticky { 
+      position: relative;
+      padding: 14px 16px; 
+      border-radius: 2px; 
+      box-shadow: 2px 4px 10px rgba(0,0,0,0.1); 
+      transform: rotate(-0.5deg); 
+      margin: 12px 0; 
+      font-size: 15.5px; 
+      line-height: 22px; 
+      font-family: 'Patrick Hand', cursive; 
+    }
     .sticky.yellow { background: var(--sticky-yellow); border-top: 8px solid #fef08a; }
     .sticky.pink { background: var(--sticky-pink); border-top: 8px solid #fbcfe8; transform: rotate(0.6deg); }
     .sticky.blue { background: var(--sticky-blue); border-top: 8px solid #bae6fd; }
 
+    .sticky-del-btn {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      background: rgba(15, 23, 42, 0.7);
+      color: #ffffff;
+      border: none;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      user-select: none;
+      z-index: 10;
+    }
+    .sticky:hover .sticky-del-btn {
+      display: flex;
+    }
+    .sticky-del-btn:hover {
+      background: #dc2626;
+    }
+
     /* Highlight Spans */
-    .hl-yellow { background: var(--highlight-yellow); padding: 0 4px; border-radius: 3px; }
-    .hl-green  { background: var(--highlight-green); padding: 0 4px; border-radius: 3px; }
-    .hl-pink   { background: var(--highlight-pink); padding: 0 4px; border-radius: 3px; }
-    .hl-blue   { background: var(--highlight-blue); padding: 0 4px; border-radius: 3px; }
+    .hl-yellow { background: var(--highlight-yellow); padding: 1px 4px; border-radius: 3px; }
+    .hl-green  { background: var(--highlight-green); padding: 1px 4px; border-radius: 3px; }
+    .hl-pink   { background: var(--highlight-pink); padding: 1px 4px; border-radius: 3px; }
+    .hl-blue   { background: var(--highlight-blue); padding: 1px 4px; border-radius: 3px; }
+    .hl-orange { background: var(--highlight-orange); padding: 1px 4px; border-radius: 3px; }
 
     /* Dropdowns */
     .reveal-box { margin-top: 8px; border-radius: 5px; overflow: hidden; }
@@ -354,7 +536,6 @@
     .mains-q-title { font-size: 17px; color: #7f1d1d; font-weight: 700; line-height: 24px; padding-right: 40px; }
     .mains-framework { font-size: 15px; color: #334155; margin-top: 4px; padding-left: 10px; border-left: 2.5px solid #991b1b; line-height: 22px; }
 
-    /* In-Box Mains Question Toolbar */
     .mains-box-toolbar {
       display: flex;
       justify-content: flex-end;
@@ -378,7 +559,7 @@
     /* Print settings */
     @media print {
       body { background: none; }
-      .toolbox, .card-toolbar, .mains-box-toolbar, .mains-item-controls { display: none !important; }
+      .toolbox, .card-toolbar, .mains-box-toolbar, .mains-item-controls, .sticky-del-btn, .text-del-btn, #floatingHighlightToolbar { display: none !important; }
       .canvas-wrapper { padding: 0; background: none; height: auto; overflow: visible; }
       .block-controls { display: none !important; }
       .reveal-box { display: block !important; }
@@ -394,10 +575,24 @@
   <aside class="toolbox">
     <div class="toolbox-header">
       <h2>Notes Element Studio</h2>
-      <p style="font-size:12px; color:#94a3b8; margin-top:2px;">Import, edit existing HTML or build fresh</p>
+      <div class="doc-meta-box">
+        <label class="doc-meta-label" for="docTitleInput">Active Note Title</label>
+        <input type="text" id="docTitleInput" class="doc-meta-input" value="Untitled Polity Note" placeholder="Enter title or let canvas auto-detect..." oninput="syncManualTitle(this.value)">
+      </div>
     </div>
     
     <div class="toolbox-items">
+      <!-- HIGHLIGHTER PALETTE IN SIDEBAR -->
+      <div class="tool-group-title">Text Highlighter</div>
+      <div class="sidebar-highlighter-row">
+        <button class="hl-palette-btn" style="background:#fef08a;" title="Highlight Yellow" onmousedown="handleHighlightClick(event, 'hl-yellow')"></button>
+        <button class="hl-palette-btn" style="background:#bbf7d0;" title="Highlight Green" onmousedown="handleHighlightClick(event, 'hl-green')"></button>
+        <button class="hl-palette-btn" style="background:#fbcfe8;" title="Highlight Pink" onmousedown="handleHighlightClick(event, 'hl-pink')"></button>
+        <button class="hl-palette-btn" style="background:#bae6fd;" title="Highlight Blue" onmousedown="handleHighlightClick(event, 'hl-blue')"></button>
+        <button class="hl-palette-btn" style="background:#fed7aa;" title="Highlight Orange" onmousedown="handleHighlightClick(event, 'hl-orange')"></button>
+        <button class="hl-palette-btn hl-clear-btn" title="Remove Highlight" onmousedown="handleClearHighlightClick(event)">✕</button>
+      </div>
+
       <div class="tool-group-title">Layout & Structure</div>
       <button class="tool-btn" onclick="insertBlock('banner')">🏷️ Blank Title Banner</button>
       <button class="tool-btn" onclick="insertBlock('header')">📌 Section Header</button>
@@ -419,7 +614,6 @@
       <button class="tool-btn" onclick="insertBlock('mcq-dropdown')">❓ Blank Prelims MCQ (Dropdown)</button>
 
       <div class="tool-group-title">Mains Engine</div>
-      <!-- Appends directly into existing Mains box if available -->
       <button class="tool-btn" onclick="insertMainsQuestion()">✍️ Add Mains Question (Q1, Q2...)</button>
     </div>
 
@@ -435,13 +629,214 @@
   </aside>
 
   <!-- WORKSPACE CANVAS -->
-  <main class="canvas-wrapper">
-    <div class="notebook-container" id="editorCanvas">
-      <!-- Starts clean and auto-expands downwards as blocks are appended or imported -->
+  <main class="canvas-wrapper" id="canvasWrapper">
+    <!-- FLOATING HIGHLIGHT POPUP TOOLBAR -->
+    <div id="floatingHighlightToolbar">
+      <span class="floating-hl-label">Highlight:</span>
+      <button class="hl-palette-btn" style="background:#fef08a;" title="Yellow" onmousedown="handleHighlightClick(event, 'hl-yellow')"></button>
+      <button class="hl-palette-btn" style="background:#bbf7d0;" title="Green" onmousedown="handleHighlightClick(event, 'hl-green')"></button>
+      <button class="hl-palette-btn" style="background:#fbcfe8;" title="Pink" onmousedown="handleHighlightClick(event, 'hl-pink')"></button>
+      <button class="hl-palette-btn" style="background:#bae6fd;" title="Blue" onmousedown="handleHighlightClick(event, 'hl-blue')"></button>
+      <button class="hl-palette-btn" style="background:#fed7aa;" title="Orange" onmousedown="handleHighlightClick(event, 'hl-orange')"></button>
+      <button class="hl-palette-btn hl-clear-btn" title="Remove Highlight" onmousedown="handleClearHighlightClick(event)">✕</button>
     </div>
+
+    <div class="notebook-container" id="editorCanvas"></div>
   </main>
 
   <script>
+    let importedFileName = null;
+    let manualTitleOverride = null;
+
+    function syncManualTitle(val) {
+      manualTitleOverride = val.trim() || null;
+    }
+
+    /* Intelligent Title Extraction from Document Canvas */
+    function resolveDocumentTitle() {
+      if (manualTitleOverride) return manualTitleOverride;
+
+      const canvas = document.getElementById('editorCanvas');
+      // 1. Search for main Title banner h1
+      const mainH1 = canvas.querySelector('.title-section h1');
+      if (mainH1 && mainH1.innerText.trim() && mainH1.innerText.trim() !== 'Main Title Here') {
+        return mainH1.innerText.trim();
+      }
+
+      // 2. Search for first Section Header
+      const firstSectionHeader = canvas.querySelector('.section-header span');
+      if (firstSectionHeader && firstSectionHeader.innerText.trim() && firstSectionHeader.innerText.trim() !== 'Section Header') {
+        return firstSectionHeader.innerText.trim();
+      }
+
+      // 3. Search for any card h3
+      const firstCardH3 = canvas.querySelector('.card-note h3');
+      if (firstCardH3 && firstCardH3.innerText.trim() && firstCardH3.innerText.trim() !== 'Card Title') {
+        return firstCardH3.innerText.trim();
+      }
+
+      // 4. Fallback to imported filename (without .html extension) or generic title
+      if (importedFileName) {
+        return importedFileName.replace(/\.[^/.]+$/, '').replace(/_/g, ' ');
+      }
+
+      return 'Polity Study Notes';
+    }
+
+    function updateTitleUI() {
+      const titleInput = document.getElementById('docTitleInput');
+      if (!manualTitleOverride) {
+        titleInput.value = resolveDocumentTitle();
+      }
+    }
+
+    // Auto-update document title preview on input inside the canvas
+    document.getElementById('editorCanvas').addEventListener('input', function() {
+      if (!manualTitleOverride) {
+        updateTitleUI();
+      }
+    });
+
+    /* ========================================================
+       TEXT HIGHLIGHTING & REMOVAL ENGINE
+       ======================================================== */
+    function handleHighlightClick(e, colorClass) {
+      e.preventDefault();
+      applyHighlight(colorClass);
+      hideFloatingToolbar();
+    }
+
+    function handleClearHighlightClick(e) {
+      e.preventDefault();
+      removeHighlight();
+      hideFloatingToolbar();
+    }
+
+    function applyHighlight(colorClass) {
+      const selection = window.getSelection();
+      if (!selection.rangeCount || selection.isCollapsed) return;
+
+      const range = selection.getRangeAt(0);
+      const span = document.createElement('span');
+      span.className = colorClass;
+
+      try {
+        range.surroundContents(span);
+      } catch (err) {
+        const extracted = range.extractContents();
+        extracted.querySelectorAll('[class*="hl-"]').forEach(el => {
+          while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+          el.remove();
+        });
+        span.appendChild(extracted);
+        range.insertNode(span);
+      }
+
+      selection.removeAllRanges();
+      const newRange = document.createRange();
+      newRange.selectNodeContents(span);
+      selection.addRange(newRange);
+    }
+
+    function removeHighlight() {
+      const selection = window.getSelection();
+      if (!selection.rangeCount) return;
+
+      const range = selection.getRangeAt(0);
+      const currentEl = selection.anchorNode.nodeType === 3 ? selection.anchorNode.parentElement : selection.anchorNode;
+
+      const parentHl = currentEl.closest('[class*="hl-"]');
+      if (parentHl) {
+        const parent = parentHl.parentNode;
+        while (parentHl.firstChild) {
+          parent.insertBefore(parentHl.firstChild, parentHl);
+        }
+        parentHl.remove();
+        parent.normalize();
+        return;
+      }
+
+      const cloned = range.cloneContents();
+      if (cloned.querySelector('[class*="hl-"]')) {
+        const extracted = range.extractContents();
+        extracted.querySelectorAll('[class*="hl-"]').forEach(el => {
+          while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+          el.remove();
+        });
+        range.insertNode(extracted);
+      }
+    }
+
+    /* Floating Toolbar Positioning */
+    const floatingToolbar = document.getElementById('floatingHighlightToolbar');
+    const canvasWrapper = document.getElementById('canvasWrapper');
+
+    function updateFloatingToolbar() {
+      const selection = window.getSelection();
+      if (!selection.rangeCount || selection.isCollapsed) {
+        hideFloatingToolbar();
+        return;
+      }
+
+      const anchorEl = selection.anchorNode.nodeType === 3 ? selection.anchorNode.parentElement : selection.anchorNode;
+      if (!anchorEl || !anchorEl.closest('#editorCanvas')) {
+        hideFloatingToolbar();
+        return;
+      }
+
+      const range = selection.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+      const wrapperRect = canvasWrapper.getBoundingClientRect();
+
+      if (rect.width === 0 && rect.height === 0) {
+        hideFloatingToolbar();
+        return;
+      }
+
+      const topPos = rect.top - wrapperRect.top + canvasWrapper.scrollTop - 48;
+      const leftPos = rect.left - wrapperRect.left + canvasWrapper.scrollLeft + (rect.width / 2);
+
+      floatingToolbar.style.top = `${topPos}px`;
+      floatingToolbar.style.left = `${leftPos}px`;
+      floatingToolbar.style.transform = 'translateX(-50%)';
+      floatingToolbar.style.display = 'flex';
+    }
+
+    function hideFloatingToolbar() {
+      if (floatingToolbar) {
+        floatingToolbar.style.display = 'none';
+      }
+    }
+
+    document.addEventListener('mouseup', function(e) {
+      if (floatingToolbar.contains(e.target)) return;
+      setTimeout(updateFloatingToolbar, 10);
+    });
+
+    document.addEventListener('keyup', function(e) {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        setTimeout(updateFloatingToolbar, 10);
+      }
+    });
+
+    canvasWrapper.addEventListener('scroll', hideFloatingToolbar);
+
+    /* ========================================================
+       ELEMENT GENERATORS & TEMPLATES
+       ======================================================== */
+    function getStickyDeleteButtonHTML() {
+      return `<button class="sticky-del-btn" contenteditable="false" onclick="this.closest('.sticky').remove()">✕</button>`;
+    }
+
+    function getTextBlockHTML(text = 'Write regular text here...') {
+      return `
+        <div class="regular-text-block">
+          <button class="text-del-btn" contenteditable="false" onclick="this.closest('.regular-text-block').remove()">✕</button>
+          <div class="regular-text-content" contenteditable="true">${text}</div>
+        </div>
+      `;
+    }
+
     function getCardToolbarHTML() {
       return `
         <div class="card-toolbar" contenteditable="false">
@@ -459,6 +854,7 @@
           <div class="card-actions">
             <button class="card-tool-btn" onclick="addBulletToCard(this)">+ Bullet</button>
             <button class="card-tool-btn" onclick="addSubpointToCard(this)">+ Sub-point</button>
+            <button class="card-tool-btn" onclick="addTextToCard(this)">+ Text Block</button>
             <button class="card-tool-btn" onclick="addStickyToCard(this, 'yellow')" style="background:#fef9c3; border-color:#fef08a;">+ 🟡 Sticky</button>
             <button class="card-tool-btn" onclick="addStickyToCard(this, 'pink')" style="background:#ffe4e6; border-color:#fbcfe8;">+ 🌸 Sticky</button>
           </div>
@@ -516,7 +912,6 @@
       
       'grid-2': `
         <div class="grid-2">
-          <!-- Col 1 -->
           <div class="grid-col" id="col1">
             <div class="card-note blue">
               ${getCardToolbarHTML()}
@@ -527,8 +922,6 @@
               </ul>
             </div>
           </div>
-          
-          <!-- Col 2 -->
           <div class="grid-col" id="col2">
             <div class="card-note green">
               ${getCardToolbarHTML()}
@@ -541,133 +934,31 @@
           </div>
         </div>`,
 
-      'card-blue': `
-        <div class="card-note blue">
-          ${getCardToolbarHTML()}
-          <h3 contenteditable="true" style="color:var(--ink-blue); font-size:20px;">Card Title</h3>
-          <ul class="bullet-list" contenteditable="true">
-            <li><strong>Core Provision:</strong> Description...</li>
-            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
-          </ul>
-        </div>`,
-
-      'card-yellow': `
-        <div class="card-note yellow">
-          ${getCardToolbarHTML()}
-          <h3 contenteditable="true" style="color:var(--ink-yellow); font-size:20px;">Card Title</h3>
-          <ul class="bullet-list" contenteditable="true">
-            <li><strong>Core Provision:</strong> Description...</li>
-            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
-          </ul>
-        </div>`,
-
-      'card-teal': `
-        <div class="card-note teal">
-          ${getCardToolbarHTML()}
-          <h3 contenteditable="true" style="color:var(--ink-teal); font-size:20px;">Card Title</h3>
-          <ul class="bullet-list" contenteditable="true">
-            <li><strong>Core Provision:</strong> Description...</li>
-            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
-          </ul>
-        </div>`,
-
-      'card-green': `
-        <div class="card-note green">
-          ${getCardToolbarHTML()}
-          <h3 contenteditable="true" style="color:var(--ink-green); font-size:20px;">Card Title</h3>
-          <ul class="bullet-list" contenteditable="true">
-            <li><strong>Core Provision:</strong> Description...</li>
-            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
-          </ul>
-        </div>`,
-
-      'card-purple': `
-        <div class="card-note purple">
-          ${getCardToolbarHTML()}
-          <h3 contenteditable="true" style="color:var(--ink-purple); font-size:20px;">Card Title</h3>
-          <ul class="bullet-list" contenteditable="true">
-            <li><strong>Core Provision:</strong> Description...</li>
-            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
-          </ul>
-        </div>`,
-
-      'card-red': `
-        <div class="card-note red">
-          ${getCardToolbarHTML()}
-          <h3 contenteditable="true" style="color:var(--ink-red); font-size:20px;">Card Title</h3>
-          <ul class="bullet-list" contenteditable="true">
-            <li><strong>Core Provision:</strong> Description...</li>
-            <div class="sub-point">▫ <strong>Detail / Note:</strong> Case citation or explanation...</div>
-          </ul>
-        </div>`,
-
-      'sticky-yellow': `
-        <div class="sticky yellow" contenteditable="true">
-          📌 <strong>Exam Catch / Summary Note:</strong><br>
-          Write your speed recall shortcut, formula, or exam caveat here.
-        </div>`,
-
-      'sticky-pink': `
-        <div class="sticky pink" contenteditable="true">
-          📌 <strong>Recent Case Law / Amendment Linkage:</strong><br>
-          Add the latest bench verdict or statutory update here.
-        </div>`,
-
-      'exam-trap': `
-        <div class="exam-trick">
-          <ul class="bullet-list" contenteditable="true" style="margin-top:2px;">
-            <li><strong>TRAP: "Common incorrect belief/myth statement here."</strong> ➔ <strong>WRONG!</strong> 
-              <div class="sub-point">
-                ▫ <strong>Constitutional Mandate:</strong> Enter the exact rule, landmark verdict, or statutory reason why this is false.
-              </div>
-            </li>
-          </ul>
-        </div>`,
-
+      'card-blue': `<div class="card-note blue">${getCardToolbarHTML()}<h3 contenteditable="true" style="color:var(--ink-blue); font-size:20px;">Card Title</h3><ul class="bullet-list" contenteditable="true"><li><strong>Core Provision:</strong> Description...</li><div class="sub-point">▫ <strong>Detail / Note:</strong> Details...</div></ul></div>`,
+      'card-yellow': `<div class="card-note yellow">${getCardToolbarHTML()}<h3 contenteditable="true" style="color:var(--ink-yellow); font-size:20px;">Card Title</h3><ul class="bullet-list" contenteditable="true"><li><strong>Core Provision:</strong> Description...</li><div class="sub-point">▫ <strong>Detail / Note:</strong> Details...</div></ul></div>`,
+      'card-teal': `<div class="card-note teal">${getCardToolbarHTML()}<h3 contenteditable="true" style="color:var(--ink-teal); font-size:20px;">Card Title</h3><ul class="bullet-list" contenteditable="true"><li><strong>Core Provision:</strong> Description...</li><div class="sub-point">▫ <strong>Detail / Note:</strong> Details...</div></ul></div>`,
+      'card-green': `<div class="card-note green">${getCardToolbarHTML()}<h3 contenteditable="true" style="color:var(--ink-green); font-size:20px;">Card Title</h3><ul class="bullet-list" contenteditable="true"><li><strong>Core Provision:</strong> Description...</li><div class="sub-point">▫ <strong>Detail / Note:</strong> Details...</div></ul></div>`,
+      'card-purple': `<div class="card-note purple">${getCardToolbarHTML()}<h3 contenteditable="true" style="color:var(--ink-purple); font-size:20px;">Card Title</h3><ul class="bullet-list" contenteditable="true"><li><strong>Core Provision:</strong> Description...</li><div class="sub-point">▫ <strong>Detail / Note:</strong> Details...</div></ul></div>`,
+      'card-red': `<div class="card-note red">${getCardToolbarHTML()}<h3 contenteditable="true" style="color:var(--ink-red); font-size:20px;">Card Title</h3><ul class="bullet-list" contenteditable="true"><li><strong>Core Provision:</strong> Description...</li><div class="sub-point">▫ <strong>Detail / Note:</strong> Details...</div></ul></div>`,
+      
+      'sticky-yellow': `<div class="sticky yellow">${getStickyDeleteButtonHTML()}<div contenteditable="true">📌 <strong>Exam Catch / Summary Note:</strong><br>Write shortcut or caveats here.</div></div>`,
+      'sticky-pink': `<div class="sticky pink">${getStickyDeleteButtonHTML()}<div contenteditable="true">📌 <strong>Recent Case Law / Amendment Linkage:</strong><br>Add recent bench verdict here.</div></div>`,
+      
+      'exam-trap': `<div class="exam-trick"><ul class="bullet-list" contenteditable="true" style="margin-top:2px;"><li><strong>TRAP: "Common incorrect statement."</strong> ➔ <strong>WRONG!</strong><div class="sub-point">▫ <strong>Constitutional Mandate:</strong> Reason why...</div></li></ul></div>`,
       'mcq-dropdown': `
         <div class="mcq-card">
           <span class="mcq-badge" contenteditable="true">EXAM BADGE</span>
-          <div contenteditable="true" style="font-weight: 600; font-size: 15px; margin-bottom: 4px;">
-            Q. Write your question prompt here?
-          </div>
-          <div class="mcq-options" contenteditable="true">
-            1) Option 1<br>
-            2) Option 2<br>
-            3) Option 3<br>
-            4) Option 4
-          </div>
+          <div contenteditable="true" style="font-weight: 600; font-size: 15px; margin-bottom: 4px;">Q. Question prompt?</div>
+          <div class="mcq-options" contenteditable="true">1) Option 1<br>2) Option 2<br>3) Option 3<br>4) Option 4</div>
           <details class="reveal-box">
             <summary>Show Answer & Constitutional Catch</summary>
-            <div class="reveal-content">
-              <div contenteditable="true" style="background-color: #ffffff; padding: 8px 10px; margin-top: 2px;">
-                ➔ <strong>Correct Answer:</strong> <span class="hl-pink">Option Number</span><br>
-                ▫ <strong>Explanation:</strong> Add explanation and legal basis here.
-              </div>
-            </div>
+            <div class="reveal-content"><div contenteditable="true" style="background-color: #ffffff; padding: 8px 10px; margin-top: 2px;">➔ <strong>Correct Answer:</strong> <span class="hl-pink">Option 1</span><br>▫ <strong>Explanation:</strong> Explanation here...</div></div>
           </details>
         </div>`,
-
       'table-blank': `
         <table class="hand-table" contenteditable="true" style="margin: 10px 0 12px 0; font-size: 14px;">
-          <thead>
-            <tr>
-              <th style="width: 25%;">Parameter</th>
-              <th style="width: 37.5%;">Category A</th>
-              <th style="width: 37.5%;">Category B</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Dimension 1</strong></td>
-              <td>Details...</td>
-              <td>Details...</td>
-            </tr>
-            <tr>
-              <td><strong>Dimension 2</strong></td>
-              <td>Details...</td>
-              <td>Details...</td>
-            </tr>
-          </tbody>
+          <thead><tr><th style="width: 25%;">Parameter</th><th style="width: 37.5%;">Category A</th><th style="width: 37.5%;">Category B</th></tr></thead>
+          <tbody><tr><td><strong>Dimension 1</strong></td><td>Details...</td><td>Details...</td></tr></tbody>
         </table>`
     };
 
@@ -690,17 +981,13 @@
       const block = wrapInBlock(templates[type]);
       canvas.appendChild(block);
       block.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      updateTitleUI();
     }
 
-    /* ========================================================
-       SMART MAINS QUESTION INSERTER
-       ======================================================== */
     function insertMainsQuestion() {
       const canvas = document.getElementById('editorCanvas');
       let mainsSection = canvas.querySelector('.mains-section');
-
       if (!mainsSection) {
-        // Create the container if it doesn't exist
         const initialHTML = `
           <div class="mains-section">
             ${getSingleMainsQuestionItemHTML(1)}
@@ -711,13 +998,11 @@
         canvas.appendChild(block);
         block.scrollIntoView({ behavior: 'smooth', block: 'end' });
       } else {
-        // Section exists: calculate next question number and append item directly into it
         const currentCount = mainsSection.querySelectorAll('.mains-q-item').length;
         const qNum = currentCount + 1;
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = getSingleMainsQuestionItemHTML(qNum).trim();
         const newItem = tempDiv.firstChild;
-        
         const toolbar = mainsSection.querySelector('.mains-box-toolbar');
         if (toolbar) {
           mainsSection.insertBefore(newItem, toolbar);
@@ -737,24 +1022,20 @@
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = getSingleMainsQuestionItemHTML(qNum).trim();
       const newItem = tempDiv.firstChild;
-      
       const toolbar = mainsSection.querySelector('.mains-box-toolbar');
       mainsSection.insertBefore(newItem, toolbar);
       newItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
       focusElement(newItem.querySelector('.mains-q-title'));
     }
 
-    /* ========================================================
-       IMPORT & PARSE EXISTING NOTES HTML FILE
-       ======================================================== */
     function handleFileSelect(event) {
       const file = event.target.files[0];
       if (!file) return;
-
+      importedFileName = file.name;
+      manualTitleOverride = null;
       const reader = new FileReader();
       reader.onload = function(e) {
-        const fileContent = e.target.result;
-        importHTMLContent(fileContent);
+        importHTMLContent(e.target.result);
       };
       reader.readAsText(file);
       event.target.value = '';
@@ -763,25 +1044,24 @@
     function importHTMLContent(rawHTML) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(rawHTML, 'text/html');
-
       const sourceContainer = doc.querySelector('.notebook-container') || doc.body;
       if (!sourceContainer) {
-        alert('Could not locate valid content in this file.');
+        alert('Could not locate content in file.');
         return;
+      }
+
+      // Check if original HTML document has a custom <title> tag
+      if (doc.title && doc.title !== 'Polity Notes Output' && doc.title !== 'Notes Visual Builder Studio') {
+        manualTitleOverride = doc.title;
       }
 
       const canvas = document.getElementById('editorCanvas');
       canvas.innerHTML = '';
-
       const children = Array.from(sourceContainer.children);
-
       children.forEach(child => {
         if (child.tagName === 'SCRIPT' || child.tagName === 'STYLE') return;
-
-        // Clean out previous toolbars/controls
-        child.querySelectorAll('.block-controls, .card-toolbar, .mains-box-toolbar, .mains-item-controls').forEach(el => el.remove());
-
-        // Inject toolbars into cards
+        child.querySelectorAll('.block-controls, .card-toolbar, .mains-box-toolbar, .mains-item-controls, .sticky-del-btn, .text-del-btn, #floatingHighlightToolbar').forEach(el => el.remove());
+        
         if (child.classList.contains('card-note')) {
           child.insertAdjacentHTML('afterbegin', getCardToolbarHTML());
         } else {
@@ -792,7 +1072,20 @@
           });
         }
 
-        // If it's a mains section, add toolbar & item controls
+        const stickies = child.classList.contains('sticky') ? [child] : Array.from(child.querySelectorAll('.sticky'));
+        stickies.forEach(st => {
+          if (!st.querySelector('.sticky-del-btn')) {
+            st.insertAdjacentHTML('afterbegin', getStickyDeleteButtonHTML());
+          }
+        });
+
+        const textBlocks = child.classList.contains('regular-text-block') ? [child] : Array.from(child.querySelectorAll('.regular-text-block'));
+        textBlocks.forEach(tb => {
+          if (!tb.querySelector('.text-del-btn')) {
+            tb.insertAdjacentHTML('afterbegin', `<button class="text-del-btn" contenteditable="false" onclick="this.closest('.regular-text-block').remove()">✕</button>`);
+          }
+        });
+
         if (child.classList.contains('mains-section') || child.querySelector('.mains-section')) {
           const section = child.classList.contains('mains-section') ? child : child.querySelector('.mains-section');
           if (!section.querySelector('.mains-box-toolbar')) {
@@ -806,9 +1099,7 @@
             `);
           });
         }
-
         makeEditable(child);
-
         if (child.classList.contains('block-wrapper')) {
           canvas.appendChild(child);
         } else {
@@ -816,31 +1107,29 @@
           canvas.appendChild(wrapped);
         }
       });
-
-      alert('Document loaded successfully! You can now edit text, change card colors, and add new points.');
+      updateTitleUI();
+      alert('Document loaded successfully!');
     }
 
     function makeEditable(node) {
       const editableSelectors = [
         'h1', 'h2', 'h3', 'h4', 'span', 'p', 'li', 'ul', 'div.sub-point',
         'div.sticky', 'div.title-section', 'div.section-header', 'div.mains-q-title',
-        'div.mains-framework', 'div.mcq-options', 'table.hand-table', 'div.exam-trick'
+        'div.mains-framework', 'div.mcq-options', 'table.hand-table', 'div.exam-trick',
+        'div.regular-text-content'
       ];
-
       editableSelectors.forEach(sel => {
         node.querySelectorAll(sel).forEach(el => {
-          if (!el.closest('.card-toolbar') && !el.closest('.block-controls') && !el.closest('.mains-box-toolbar') && !el.closest('.mains-item-controls')) {
+          if (!el.closest('.card-toolbar') && !el.closest('.block-controls') && !el.closest('.mains-box-toolbar') && !el.closest('.mains-item-controls') && !el.classList.contains('sticky-del-btn') && !el.classList.contains('text-del-btn') && !el.closest('#floatingHighlightToolbar')) {
             el.setAttribute('contenteditable', 'true');
           }
         });
       });
-
-      if (editableSelectors.some(sel => node.matches && node.matches(sel))) {
+      if (editableSelectors.some(sel => node.matches && node.matches(sel)) && !node.classList.contains('sticky-del-btn') && !node.classList.contains('text-del-btn') && !node.closest('#floatingHighlightToolbar')) {
         node.setAttribute('contenteditable', 'true');
       }
     }
 
-    /* CARD COLOR & IN-PLACE POINT TOOLS */
     const colorMap = {
       blue:   { border: 'blue',   ink: 'var(--ink-blue)' },
       yellow: { border: 'yellow', ink: 'var(--ink-yellow)' },
@@ -858,9 +1147,7 @@
       Object.keys(colorMap).forEach(c => card.classList.remove(c));
       card.classList.add(colorName);
       const heading = card.querySelector('h3');
-      if (heading) {
-        heading.style.color = colorMap[colorName].ink;
-      }
+      if (heading) heading.style.color = colorMap[colorName].ink;
     }
 
     function addBulletToCard(btn) {
@@ -891,15 +1178,27 @@
       focusElement(sub);
     }
 
+    function addTextToCard(btn) {
+      const card = btn.closest('.card-note');
+      if (!card) return;
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = getTextBlockHTML('Write regular text here...').trim();
+      const textBlock = tempDiv.firstChild;
+      card.appendChild(textBlock);
+      focusElement(textBlock.querySelector('.regular-text-content'));
+    }
+
     function addStickyToCard(btn, color) {
       const card = btn.closest('.card-note');
       if (!card) return;
       const sticky = document.createElement('div');
       sticky.className = `sticky ${color}`;
-      sticky.contentEditable = 'true';
-      sticky.innerHTML = `📌 <strong>Note:</strong> Write note here...`;
+      sticky.innerHTML = `
+        ${getStickyDeleteButtonHTML()}
+        <div contenteditable="true">📌 <strong>Note:</strong> Write note here...</div>
+      `;
       card.appendChild(sticky);
-      focusElement(sticky);
+      focusElement(sticky.querySelector('[contenteditable="true"]'));
     }
 
     function focusElement(el) {
@@ -914,80 +1213,137 @@
 
     /* KEYBOARD AUTOMATION ENGINE */
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        const selection = window.getSelection();
-        if (!selection.rangeCount) return;
-        const currentEl = selection.anchorNode.nodeType === 3 ? selection.anchorNode.parentElement : selection.anchorNode;
-        
-        // Inside <li> tag
-        const li = currentEl.closest('li');
-        if (li && li.closest('.bullet-list')) {
-          e.preventDefault();
-          if (e.shiftKey) {
-            const sub = document.createElement('div');
-            sub.className = 'sub-point';
-            sub.innerHTML = '▫ <strong>Note:</strong> ';
-            li.after(sub);
-            focusElement(sub);
-          } else {
-            const newLi = document.createElement('li');
-            newLi.innerHTML = '<strong>Point:</strong> ';
-            li.after(newLi);
-            focusElement(newLi);
+      const selection = window.getSelection();
+      if (!selection.rangeCount) return;
+      const currentEl = selection.anchorNode.nodeType === 3 ? selection.anchorNode.parentElement : selection.anchorNode;
+
+      if (e.key === 'Backspace') {
+        const sticky = currentEl.closest('.sticky');
+        if (sticky) {
+          const cleanText = sticky.innerText.replace('✕', '').replace('📌', '').trim();
+          if (cleanText === '' || cleanText === 'Note:') {
+            e.preventDefault();
+            sticky.remove();
+            return;
           }
+        }
+
+        const textBlock = currentEl.closest('.regular-text-block');
+        if (textBlock) {
+          const content = textBlock.querySelector('.regular-text-content');
+          if (content && content.innerText.trim() === '') {
+            e.preventDefault();
+            textBlock.remove();
+            return;
+          }
+        }
+      }
+
+      if (e.key === 'Enter' && e.shiftKey) {
+        const subOrBullet = currentEl.closest('.sub-point, li');
+        if (subOrBullet) {
+          e.preventDefault();
+          const card = subOrBullet.closest('.card-note');
+          const list = subOrBullet.closest('.bullet-list');
+          
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = getTextBlockHTML('Write regular text here...').trim();
+          const textBlock = tempDiv.firstChild;
+
+          if (list && list.parentNode) {
+            list.parentNode.insertBefore(textBlock, list.nextSibling);
+          } else if (card) {
+            card.appendChild(textBlock);
+          }
+          focusElement(textBlock.querySelector('.regular-text-content'));
+          return;
+        }
+      }
+
+      if (e.key === 'Enter' && !e.shiftKey) {
+        const inTextBlock = currentEl.closest('.regular-text-content');
+        if (inTextBlock) {
+          e.preventDefault();
+          const range = selection.getRangeAt(0);
+          range.deleteContents();
+          const br = document.createElement('br');
+          range.insertNode(br);
+          range.setStartAfter(br);
+          range.setEndAfter(br);
+          selection.removeAllRanges();
+          selection.addRange(range);
           return;
         }
 
-        // Inside .sub-point tag
-        const sub = currentEl.closest('.sub-point');
-        if (sub && sub.closest('.bullet-list')) {
+        const targetContainer = currentEl.closest('li, .sub-point, .sticky div[contenteditable="true"], .mains-framework');
+        if (targetContainer) {
           e.preventDefault();
-          const newLi = document.createElement('li');
-          newLi.innerHTML = '<strong>Point:</strong> ';
-          sub.after(newLi);
-          focusElement(newLi);
+          const range = selection.getRangeAt(0);
+          range.deleteContents();
+
+          const br = document.createElement('br');
+          const bulletText = document.createTextNode(' • ');
+
+          range.insertNode(bulletText);
+          range.insertNode(br);
+
+          range.setStartAfter(bulletText);
+          range.setEndAfter(bulletText);
+          selection.removeAllRanges();
+          selection.addRange(range);
           return;
         }
       }
     });
 
-    function deleteBlock(btn) {
-      btn.closest('.block-wrapper').remove();
+    function deleteBlock(btn) { 
+      btn.closest('.block-wrapper').remove(); 
+      updateTitleUI();
     }
-
     function moveUp(btn) {
       const wrapper = btn.closest('.block-wrapper');
-      if (wrapper.previousElementSibling) {
-        wrapper.parentNode.insertBefore(wrapper, wrapper.previousElementSibling);
-      }
+      if (wrapper.previousElementSibling) wrapper.parentNode.insertBefore(wrapper, wrapper.previousElementSibling);
     }
-
     function moveDown(btn) {
       const wrapper = btn.closest('.block-wrapper');
-      if (wrapper.nextElementSibling) {
-        wrapper.parentNode.insertBefore(wrapper.nextElementSibling, wrapper);
-      }
+      if (wrapper.nextElementSibling) wrapper.parentNode.insertBefore(wrapper, wrapper.nextElementSibling);
     }
-
     function clearCanvas() {
       if (confirm('Clear the entire notebook canvas?')) {
         document.getElementById('editorCanvas').innerHTML = '';
+        manualTitleOverride = null;
+        importedFileName = null;
+        updateTitleUI();
       }
     }
 
+    /* ========================================================
+       DYNAMIC EXPORT WITH COMPUTED TITLE & FILENAME
+       ======================================================== */
     function exportCleanHTML() {
       const canvasClone = document.getElementById('editorCanvas').cloneNode(true);
-      
-      // Clean UI tools, in-card controls & editable attributes
-      canvasClone.querySelectorAll('.block-controls, .card-toolbar, .mains-box-toolbar, .mains-item-controls').forEach(el => el.remove());
+      canvasClone.querySelectorAll('.block-controls, .card-toolbar, .mains-box-toolbar, .mains-item-controls, .sticky-del-btn, .text-del-btn, #floatingHighlightToolbar').forEach(el => el.remove());
       canvasClone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+
+      // 1. Resolve Document Title dynamically
+      const resolvedTitle = resolveDocumentTitle();
+
+      // 2. Resolve Dynamic Download File Name
+      let downloadFilename;
+      if (importedFileName) {
+        downloadFilename = importedFileName;
+      } else {
+        // Convert resolved title to clean snake_case filename
+        const sanitized = resolvedTitle.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+        downloadFilename = (sanitized || 'polity_notes') + '.html';
+      }
 
       const fullHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Polity Notes Output</title>
+<title>${resolvedTitle}</title>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Kalam:wght@300;400;700&family=Patrick+Hand&family=Inter:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
   ${document.querySelector('style').innerHTML}
@@ -1004,7 +1360,7 @@
       const blob = new Blob([fullHTML], { type: 'text/html' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'polity_master_notes.html';
+      a.download = downloadFilename;
       a.click();
     }
   </script>
