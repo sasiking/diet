@@ -11,7 +11,7 @@
     <title>Diet & Macro Nutrients Studio</title>
   </head>
   <body>
-    <!-- MODERN APP NAVBAR -->
+    <!-- APP HEADER -->
     <header class="app-header">
       <div class="header-inner">
         <div class="brand-zone">
@@ -31,12 +31,12 @@
     </header>
 
     <main class="main-layout">
-      <!-- CALCULATOR MAIN CARD -->
+      <!-- MAIN CALCULATOR CARD -->
       <section class="calculator-card">
         <form id="dietForm">
           <div class="calculator-grid">
             
-            <!-- COLUMN 1: TARGETS & PERCENTAGES -->
+            <!-- COLUMN 1: TARGETS & MACRO RATIOS -->
             <div class="calc-panel input-panel">
               <h2 class="panel-title">1. Daily Targets & Ratios</h2>
               
@@ -101,7 +101,7 @@
               <h2 class="panel-title">2. Calculated Macronutrient Breakdown</h2>
               
               <div class="results-cards-grid">
-                <!-- CARB RESULTS CARD -->
+                <!-- CARB CARD -->
                 <div class="macro-result-card carb-card">
                   <div class="card-icon">🍞</div>
                   <div class="card-meta">
@@ -117,7 +117,7 @@
                   </div>
                 </div>
 
-                <!-- PROTEIN RESULTS CARD -->
+                <!-- PROTEIN CARD -->
                 <div class="macro-result-card protein-card">
                   <div class="card-icon">🥩</div>
                   <div class="card-meta">
@@ -133,7 +133,7 @@
                   </div>
                 </div>
 
-                <!-- FAT RESULTS CARD -->
+                <!-- FAT CARD -->
                 <div class="macro-result-card fat-card">
                   <div class="card-icon">🥑</div>
                   <div class="card-meta">
@@ -155,12 +155,12 @@
         </form>
       </section>
 
-      <!-- FOOD SOURCES & INVENTORY TRACKER -->
+      <!-- DYNAMIC FOOD SOURCES SECTION -->
       <section class="sources-card">
         <div class="sources-header">
           <div>
             <h2 class="panel-title" style="margin-bottom: 2px;">3. Custom Dietary Sources</h2>
-            <p class="helper-text" style="margin: 0;">Add food groups to plan your meal composition</p>
+            <p class="helper-text" style="margin: 0;">Add food groups to dynamically plan and track meal composition</p>
           </div>
 
           <div class="sources-controls">
@@ -173,18 +173,18 @@
               <option value="Millets">🌾 Millets & Grains</option>
             </select>
             <button type="button" id="btnAdd" class="btn btn-add" onclick="AddDropDownList()">+ Add Group</button>
-            <button type="button" class="btn btn-remove" onclick="btnRemove()">✕ Remove</button>
+            <button type="button" class="btn btn-remove" onclick="btnRemove()">✕ Remove Last</button>
           </div>
         </div>
 
         <div id="dvContainer" class="sources-container"></div>
         <div class="total-bar">
-          <p id="total-resources"></p>
+          <div id="total-resources"></div>
         </div>
       </section>
     </main>
 
-    <!-- LIVE DYNAMIC SCRIPT -->
+    <!-- LIVE VALIDATION & MACRO BAR SCRIPT -->
     <script>
       function updateLiveRatios() {
         const c = parseFloat(document.getElementById('carb-per').value) || 0;
@@ -200,7 +200,6 @@
 
         badge.textContent = `Total: ${total}%`;
 
-        // Update progress bar widths proportional to entry
         const scale = total > 0 ? 100 / total : 1;
         barC.style.width = (c * scale) + '%';
         barP.style.width = (p * scale) + '%';
